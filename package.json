@@ -2,14 +2,15 @@
   "name": "@kusionstack/kusion-api-client-sdk",
   "version": "1.0.0",
   "description": "Kusion API Client SDK",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/src/client/index.js",
+  "types": "dist/src/client/index.d.ts",
   "files": [
     "dist",
     "LICENSE",
     "README.md"
   ],
   "scripts": {
+    "type-check": "tsc -p tsconfig.json --noEmit",
     "build": "tsc -p tsconfig.build.json",
     "tsc": "tsc",
     "clean": "rm -rf dist",

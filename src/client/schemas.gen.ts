@@ -13,9 +13,9 @@ export const constant_RunTypeSchema = {
 } as const;
 
 export const constant_SourceProviderTypeSchema = {
-    enum: ['git', 'git', 'github', 'oci', 'local'],
+    enum: ['git', 'github', 'oci', 'local', 'git'],
     type: 'string',
-    'x-enum-varnames': ['DefaultSourceType', 'SourceProviderTypeGit', 'SourceProviderTypeGithub', 'SourceProviderTypeOCI', 'SourceProviderTypeLocal']
+    'x-enum-varnames': ['SourceProviderTypeGit', 'SourceProviderTypeGithub', 'SourceProviderTypeOCI', 'SourceProviderTypeLocal', 'DefaultSourceType']
 } as const;
 
 export const constant_StackStateSchema = {
@@ -29,7 +29,7 @@ export const entity_BackendSchema = {
         backendConfig: {
             allOf: [
                 {
-                    '$ref': '#/definitions/v1.BackendConfig'
+                    '$ref': '#/definitions/kusionstack_io_kusion_pkg_apis_api_kusion_io_v1.BackendConfig'
                 }
             ],
             description: `// Type is the type of the backend.
@@ -280,6 +280,10 @@ export const entity_ResourceSchema = {
         },
         resourceType: {
             description: 'ResourceType is the type of the resource.',
+            type: 'string'
+        },
+        resourceURN: {
+            description: 'ResourceURN is the urn of the resource.',
             type: 'string'
         },
         stack: {
@@ -619,10 +623,375 @@ export const entity_WorkspaceSchema = {
     type: 'object'
 } as const;
 
+export const kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_AWSProviderSchema = {
+    properties: {
+        profile: {
+            description: `The profile to be used to interact with AWS Secrets Manager.
+If not set, the default profile created with \`aws configure\` will be used.`,
+            type: 'string'
+        },
+        region: {
+            description: `AWS Region to be used to interact with AWS Secrets Manager.
+Examples are us-east-1, us-west-2, etc.`,
+            type: 'string'
+        }
+    },
+    type: 'object'
+} as const;
+
+export const kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_AlicloudProviderSchema = {
+    properties: {
+        region: {
+            description: `Alicloud Region to be used to interact with Alicloud Secrets Manager.
+Examples are cn-beijing, cn-shanghai, etc.`,
+            type: 'string'
+        }
+    },
+    type: 'object'
+} as const;
+
+export const kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_AzureEnvironmentTypeSchema = {
+    enum: ['PublicCloud', 'USGovernmentCloud', 'ChinaCloud', 'GermanCloud'],
+    type: 'string',
+    'x-enum-varnames': ['AzureEnvironmentPublicCloud', 'AzureEnvironmentUSGovernmentCloud', 'AzureEnvironmentChinaCloud', 'AzureEnvironmentGermanCloud']
+} as const;
+
+export const kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_AzureKVProviderSchema = {
+    properties: {
+        environmentType: {
+            allOf: [
+                {
+                    '$ref': '#/definitions/kusionstack_io_kusion_pkg_apis_api_kusion_io_v1.AzureEnvironmentType'
+                }
+            ],
+            description: `EnvironmentType specifies the Azure cloud environment endpoints to use for connecting and authenticating with Azure.
+By-default it points to the public cloud AAD endpoint, and the following endpoints are available:
+PublicCloud, USGovernmentCloud, ChinaCloud, GermanCloud
+Ref: https://github.com/Azure/go-autorest/blob/main/autorest/azure/environments.go#L152`
+        },
+        tenantId: {
+            description: 'TenantID configures the Azure Tenant to send requests to.',
+            type: 'string'
+        },
+        vaultUrl: {
+            description: 'Vault Url from which the secrets to be fetched from.',
+            type: 'string'
+        }
+    },
+    type: 'object'
+} as const;
+
+export const kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_BackendConfigSchema = {
+    properties: {
+        configs: {
+            additionalProperties: {},
+            description: 'Configs contains config items of the backend, whose keys differ from different backend types.',
+            type: 'object'
+        },
+        type: {
+            description: 'Type is the backend type, supports BackendTypeLocal, BackendTypeOss, BackendTypeS3.',
+            type: 'string'
+        }
+    },
+    type: 'object'
+} as const;
+
+export const kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_ConfigsSchema = {
+    properties: {
+        default: {
+            allOf: [
+                {
+                    '$ref': '#/definitions/kusionstack_io_kusion_pkg_apis_api_kusion_io_v1.GenericConfig'
+                }
+            ],
+            description: 'Default is default block of the module config.'
+        }
+    },
+    type: 'object'
+} as const;
+
+export const kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_FakeProviderSchema = {
+    properties: {
+        data: {
+            items: {
+                '$ref': '#/definitions/kusionstack_io_kusion_pkg_apis_api_kusion_io_v1.FakeProviderData'
+            },
+            type: 'array'
+        }
+    },
+    type: 'object'
+} as const;
+
+export const kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_FakeProviderDataSchema = {
+    properties: {
+        key: {
+            type: 'string'
+        },
+        value: {
+            type: 'string'
+        },
+        valueMap: {
+            additionalProperties: {
+                type: 'string'
+            },
+            type: 'object'
+        },
+        version: {
+            type: 'string'
+        }
+    },
+    type: 'object'
+} as const;
+
+export const kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_GenericConfigSchema = {
+    additionalProperties: {},
+    type: 'object'
+} as const;
+
+export const kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_ModuleConfigSchema = {
+    properties: {
+        configs: {
+            allOf: [
+                {
+                    '$ref': '#/definitions/kusionstack_io_kusion_pkg_apis_api_kusion_io_v1.Configs'
+                }
+            ],
+            description: 'Configs contains all levels of module configs'
+        },
+        path: {
+            description: 'Path is the path of the module. It can be a local path or a remote URL',
+            type: 'string'
+        },
+        version: {
+            description: 'Version is the version of the module.',
+            type: 'string'
+        }
+    },
+    type: 'object'
+} as const;
+
+export const kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_ModuleConfigsSchema = {
+    additionalProperties: {
+        '$ref': '#/definitions/kusionstack_io_kusion_pkg_apis_api_kusion_io_v1.ModuleConfig'
+    },
+    type: 'object'
+} as const;
+
+export const kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_ModulePatcherConfigSchema = {
+    properties: {
+        projectSelector: {
+            description: 'ProjectSelector contains the selected projects.',
+            items: {
+                type: 'string'
+            },
+            type: 'array'
+        }
+    },
+    type: 'object'
+} as const;
+
+export const kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_OnPremisesProviderSchema = {
+    properties: {
+        attributes: {
+            additionalProperties: {
+                type: 'string'
+            },
+            description: 'attributes of the provider',
+            type: 'object'
+        },
+        name: {
+            description: 'platform name of the provider',
+            type: 'string'
+        }
+    },
+    type: 'object'
+} as const;
+
+export const kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_ProviderSpecSchema = {
+    properties: {
+        alicloud: {
+            allOf: [
+                {
+                    '$ref': '#/definitions/kusionstack_io_kusion_pkg_apis_api_kusion_io_v1.AlicloudProvider'
+                }
+            ],
+            description: 'Alicloud configures a store to retrieve secrets from Alicloud Secrets Manager.'
+        },
+        aws: {
+            allOf: [
+                {
+                    '$ref': '#/definitions/kusionstack_io_kusion_pkg_apis_api_kusion_io_v1.AWSProvider'
+                }
+            ],
+            description: 'AWS configures a store to retrieve secrets from AWS Secrets Manager.'
+        },
+        azure: {
+            allOf: [
+                {
+                    '$ref': '#/definitions/kusionstack_io_kusion_pkg_apis_api_kusion_io_v1.AzureKVProvider'
+                }
+            ],
+            description: 'Azure configures a store to retrieve secrets from Azure KeyVault.'
+        },
+        fake: {
+            allOf: [
+                {
+                    '$ref': '#/definitions/kusionstack_io_kusion_pkg_apis_api_kusion_io_v1.FakeProvider'
+                }
+            ],
+            description: 'Fake configures a store with static key/value pairs'
+        },
+        onpremises: {
+            allOf: [
+                {
+                    '$ref': '#/definitions/kusionstack_io_kusion_pkg_apis_api_kusion_io_v1.OnPremisesProvider'
+                }
+            ],
+            description: 'Onprem configures a store in on-premises environments'
+        },
+        vault: {
+            allOf: [
+                {
+                    '$ref': '#/definitions/kusionstack_io_kusion_pkg_apis_api_kusion_io_v1.VaultProvider'
+                }
+            ],
+            description: 'Vault configures a store to retrieve secrets from HashiCorp Vault.'
+        },
+        viettelcloud: {
+            allOf: [
+                {
+                    '$ref': '#/definitions/kusionstack_io_kusion_pkg_apis_api_kusion_io_v1.ViettelCloudProvider'
+                }
+            ],
+            description: 'ViettelCloud configures a store to retrieve secrets from ViettelCloud Secrets Manager.'
+        }
+    },
+    type: 'object'
+} as const;
+
+export const kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_ResourceSchema = {
+    properties: {
+        attributes: {
+            additionalProperties: true,
+            description: 'Attributes represents all specified attributes of this resource',
+            type: 'object'
+        },
+        dependsOn: {
+            description: 'DependsOn contains all resources this resource depends on',
+            items: {
+                type: 'string'
+            },
+            type: 'array'
+        },
+        extensions: {
+            additionalProperties: true,
+            description: 'Extensions specifies arbitrary metadata of this resource',
+            type: 'object'
+        },
+        id: {
+            description: `ID is the unique key of this resource.
+ApiVersion:Kind:Namespace:Name is an idiomatic way for Kubernetes resources.
+providerNamespace:providerName:resourceType:resourceName for Terraform resources`,
+            type: 'string'
+        },
+        type: {
+            allOf: [
+                {
+                    '$ref': '#/definitions/kusionstack_io_kusion_pkg_apis_api_kusion_io_v1.Type'
+                }
+            ],
+            description: 'Type represents all Context we supported like Kubernetes and Terraform'
+        }
+    },
+    type: 'object'
+} as const;
+
+export const kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_SecretStoreSchema = {
+    properties: {
+        provider: {
+            '$ref': '#/definitions/kusionstack_io_kusion_pkg_apis_api_kusion_io_v1.ProviderSpec'
+        }
+    },
+    type: 'object'
+} as const;
+
+export const kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_SpecSchema = {
+    properties: {
+        context: {
+            allOf: [
+                {
+                    '$ref': '#/definitions/kusionstack_io_kusion_pkg_apis_api_kusion_io_v1.GenericConfig'
+                }
+            ],
+            description: 'Context contains workspace-level configurations, such as runtimes, topologies, and metadata, etc.'
+        },
+        resources: {
+            description: 'Resources is the list of Resource this Spec contains.',
+            items: {
+                '$ref': '#/definitions/kusionstack_io_kusion_pkg_apis_api_kusion_io_v1.Resource'
+            },
+            type: 'array'
+        },
+        secretStore: {
+            allOf: [
+                {
+                    '$ref': '#/definitions/kusionstack_io_kusion_pkg_apis_api_kusion_io_v1.SecretStore'
+                }
+            ],
+            description: 'SecretSore represents a external secret store location for storing secrets.'
+        }
+    },
+    type: 'object'
+} as const;
+
 export const kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_TypeSchema = {
     enum: ['Kubernetes', 'Terraform'],
     type: 'string',
     'x-enum-varnames': ['Kubernetes', 'Terraform']
+} as const;
+
+export const kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_VaultKVStoreVersionSchema = {
+    enum: ['v1', 'v2'],
+    type: 'string',
+    'x-enum-varnames': ['VaultKVStoreV1', 'VaultKVStoreV2']
+} as const;
+
+export const kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_VaultProviderSchema = {
+    properties: {
+        path: {
+            description: 'Path is the mount path of the Vault KV backend endpoint, e.g: "secret".',
+            type: 'string'
+        },
+        server: {
+            description: 'Server is the target Vault server address to connect, e.g: "https://vault.example.com:8200".',
+            type: 'string'
+        },
+        version: {
+            allOf: [
+                {
+                    '$ref': '#/definitions/kusionstack_io_kusion_pkg_apis_api_kusion_io_v1.VaultKVStoreVersion'
+                }
+            ],
+            description: `Version is the Vault KV secret engine version. Version can be either "v1" or
+"v2", defaults to "v2".`
+        }
+    },
+    type: 'object'
+} as const;
+
+export const kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_ViettelCloudProviderSchema = {
+    properties: {
+        cmpURL: {
+            description: `ViettelCloud CMP URL to be used to interact with ViettelCloud Secrets Manager.
+Examples are https://console.viettelcloud.vn/api/`,
+            type: 'string'
+        },
+        projectID: {
+            description: 'ProjectID to be used to interact with ViettelCloud Secrets Manager.',
+            type: 'string'
+        }
+    },
+    type: 'object'
 } as const;
 
 export const models_ActionTypeSchema = {
@@ -685,7 +1054,7 @@ export const request_CreateBackendRequestSchema = {
         backendConfig: {
             allOf: [
                 {
-                    '$ref': '#/definitions/v1.BackendConfig'
+                    '$ref': '#/definitions/kusionstack_io_kusion_pkg_apis_api_kusion_io_v1.BackendConfig'
                 }
             ],
             description: 'BackendConfig is the configuration of the backend.'
@@ -943,7 +1312,7 @@ export const request_UpdateBackendRequestSchema = {
         backendConfig: {
             allOf: [
                 {
-                    '$ref': '#/definitions/v1.BackendConfig'
+                    '$ref': '#/definitions/kusionstack_io_kusion_pkg_apis_api_kusion_io_v1.BackendConfig'
                 }
             ],
             description: 'BackendConfig is the configuration of the backend.'
@@ -1213,7 +1582,7 @@ export const request_WorkspaceConfigsSchema = {
         context: {
             allOf: [
                 {
-                    '$ref': '#/definitions/v1.GenericConfig'
+                    '$ref': '#/definitions/kusionstack_io_kusion_pkg_apis_api_kusion_io_v1.GenericConfig'
                 }
             ],
             description: 'Context contains workspace-level configurations, such as runtimes, topologies, and metadata, etc.'
@@ -1221,7 +1590,7 @@ export const request_WorkspaceConfigsSchema = {
         modules: {
             allOf: [
                 {
-                    '$ref': '#/definitions/v1.ModuleConfigs'
+                    '$ref': '#/definitions/kusionstack_io_kusion_pkg_apis_api_kusion_io_v1.ModuleConfigs'
                 }
             ],
             description: 'Modules are the configs of a set of modules.'
@@ -1229,7 +1598,7 @@ export const request_WorkspaceConfigsSchema = {
         secretStore: {
             allOf: [
                 {
-                    '$ref': '#/definitions/v1.SecretStore'
+                    '$ref': '#/definitions/kusionstack_io_kusion_pkg_apis_api_kusion_io_v1.SecretStore'
                 }
             ],
             description: 'SecretStore represents a secure external location for storing secrets.'
@@ -1292,370 +1661,5 @@ export const url_URLSchema = {
 } as const;
 
 export const url_UserinfoSchema = {
-    type: 'object'
-} as const;
-
-export const v1_AWSProviderSchema = {
-    properties: {
-        profile: {
-            description: `The profile to be used to interact with AWS Secrets Manager.
-If not set, the default profile created with \`aws configure\` will be used.`,
-            type: 'string'
-        },
-        region: {
-            description: `AWS Region to be used to interact with AWS Secrets Manager.
-Examples are us-east-1, us-west-2, etc.`,
-            type: 'string'
-        }
-    },
-    type: 'object'
-} as const;
-
-export const v1_AlicloudProviderSchema = {
-    properties: {
-        region: {
-            description: `Alicloud Region to be used to interact with Alicloud Secrets Manager.
-Examples are cn-beijing, cn-shanghai, etc.`,
-            type: 'string'
-        }
-    },
-    type: 'object'
-} as const;
-
-export const v1_AzureEnvironmentTypeSchema = {
-    enum: ['PublicCloud', 'USGovernmentCloud', 'ChinaCloud', 'GermanCloud'],
-    type: 'string',
-    'x-enum-varnames': ['AzureEnvironmentPublicCloud', 'AzureEnvironmentUSGovernmentCloud', 'AzureEnvironmentChinaCloud', 'AzureEnvironmentGermanCloud']
-} as const;
-
-export const v1_AzureKVProviderSchema = {
-    properties: {
-        environmentType: {
-            allOf: [
-                {
-                    '$ref': '#/definitions/v1.AzureEnvironmentType'
-                }
-            ],
-            description: `EnvironmentType specifies the Azure cloud environment endpoints to use for connecting and authenticating with Azure.
-By-default it points to the public cloud AAD endpoint, and the following endpoints are available:
-PublicCloud, USGovernmentCloud, ChinaCloud, GermanCloud
-Ref: https://github.com/Azure/go-autorest/blob/main/autorest/azure/environments.go#L152`
-        },
-        tenantId: {
-            description: 'TenantID configures the Azure Tenant to send requests to.',
-            type: 'string'
-        },
-        vaultUrl: {
-            description: 'Vault Url from which the secrets to be fetched from.',
-            type: 'string'
-        }
-    },
-    type: 'object'
-} as const;
-
-export const v1_BackendConfigSchema = {
-    properties: {
-        configs: {
-            additionalProperties: {},
-            description: 'Configs contains config items of the backend, whose keys differ from different backend types.',
-            type: 'object'
-        },
-        type: {
-            description: 'Type is the backend type, supports BackendTypeLocal, BackendTypeOss, BackendTypeS3.',
-            type: 'string'
-        }
-    },
-    type: 'object'
-} as const;
-
-export const v1_ConfigsSchema = {
-    properties: {
-        default: {
-            allOf: [
-                {
-                    '$ref': '#/definitions/v1.GenericConfig'
-                }
-            ],
-            description: 'Default is default block of the module config.'
-        }
-    },
-    type: 'object'
-} as const;
-
-export const v1_FakeProviderSchema = {
-    properties: {
-        data: {
-            items: {
-                '$ref': '#/definitions/v1.FakeProviderData'
-            },
-            type: 'array'
-        }
-    },
-    type: 'object'
-} as const;
-
-export const v1_FakeProviderDataSchema = {
-    properties: {
-        key: {
-            type: 'string'
-        },
-        value: {
-            type: 'string'
-        },
-        valueMap: {
-            additionalProperties: {
-                type: 'string'
-            },
-            type: 'object'
-        },
-        version: {
-            type: 'string'
-        }
-    },
-    type: 'object'
-} as const;
-
-export const v1_GenericConfigSchema = {
-    additionalProperties: {},
-    type: 'object'
-} as const;
-
-export const v1_ModuleConfigSchema = {
-    properties: {
-        configs: {
-            allOf: [
-                {
-                    '$ref': '#/definitions/v1.Configs'
-                }
-            ],
-            description: 'Configs contains all levels of module configs'
-        },
-        path: {
-            description: 'Path is the path of the module. It can be a local path or a remote URL',
-            type: 'string'
-        },
-        version: {
-            description: 'Version is the version of the module.',
-            type: 'string'
-        }
-    },
-    type: 'object'
-} as const;
-
-export const v1_ModuleConfigsSchema = {
-    additionalProperties: {
-        '$ref': '#/definitions/v1.ModuleConfig'
-    },
-    type: 'object'
-} as const;
-
-export const v1_ModulePatcherConfigSchema = {
-    properties: {
-        projectSelector: {
-            description: 'ProjectSelector contains the selected projects.',
-            items: {
-                type: 'string'
-            },
-            type: 'array'
-        }
-    },
-    type: 'object'
-} as const;
-
-export const v1_OnPremisesProviderSchema = {
-    properties: {
-        attributes: {
-            additionalProperties: {
-                type: 'string'
-            },
-            description: 'attributes of the provider',
-            type: 'object'
-        },
-        name: {
-            description: 'platform name of the provider',
-            type: 'string'
-        }
-    },
-    type: 'object'
-} as const;
-
-export const v1_ProviderSpecSchema = {
-    properties: {
-        alicloud: {
-            allOf: [
-                {
-                    '$ref': '#/definitions/v1.AlicloudProvider'
-                }
-            ],
-            description: 'Alicloud configures a store to retrieve secrets from Alicloud Secrets Manager.'
-        },
-        aws: {
-            allOf: [
-                {
-                    '$ref': '#/definitions/v1.AWSProvider'
-                }
-            ],
-            description: 'AWS configures a store to retrieve secrets from AWS Secrets Manager.'
-        },
-        azure: {
-            allOf: [
-                {
-                    '$ref': '#/definitions/v1.AzureKVProvider'
-                }
-            ],
-            description: 'Azure configures a store to retrieve secrets from Azure KeyVault.'
-        },
-        fake: {
-            allOf: [
-                {
-                    '$ref': '#/definitions/v1.FakeProvider'
-                }
-            ],
-            description: 'Fake configures a store with static key/value pairs'
-        },
-        onpremises: {
-            allOf: [
-                {
-                    '$ref': '#/definitions/v1.OnPremisesProvider'
-                }
-            ],
-            description: 'Onprem configures a store in on-premises environments'
-        },
-        vault: {
-            allOf: [
-                {
-                    '$ref': '#/definitions/v1.VaultProvider'
-                }
-            ],
-            description: 'Vault configures a store to retrieve secrets from HashiCorp Vault.'
-        },
-        viettelcloud: {
-            allOf: [
-                {
-                    '$ref': '#/definitions/v1.ViettelCloudProvider'
-                }
-            ],
-            description: 'ViettelCloud configures a store to retrieve secrets from ViettelCloud Secrets Manager.'
-        }
-    },
-    type: 'object'
-} as const;
-
-export const v1_ResourceSchema = {
-    properties: {
-        attributes: {
-            additionalProperties: true,
-            description: 'Attributes represents all specified attributes of this resource',
-            type: 'object'
-        },
-        dependsOn: {
-            description: 'DependsOn contains all resources this resource depends on',
-            items: {
-                type: 'string'
-            },
-            type: 'array'
-        },
-        extensions: {
-            additionalProperties: true,
-            description: 'Extensions specifies arbitrary metadata of this resource',
-            type: 'object'
-        },
-        id: {
-            description: `ID is the unique key of this resource.
-ApiVersion:Kind:Namespace:Name is an idiomatic way for Kubernetes resources.
-providerNamespace:providerName:resourceType:resourceName for Terraform resources`,
-            type: 'string'
-        },
-        type: {
-            allOf: [
-                {
-                    '$ref': '#/definitions/kusionstack_io_kusion_pkg_apis_api_kusion_io_v1.Type'
-                }
-            ],
-            description: 'Type represents all Context we supported like Kubernetes and Terraform'
-        }
-    },
-    type: 'object'
-} as const;
-
-export const v1_SecretStoreSchema = {
-    properties: {
-        provider: {
-            '$ref': '#/definitions/v1.ProviderSpec'
-        }
-    },
-    type: 'object'
-} as const;
-
-export const v1_SpecSchema = {
-    properties: {
-        context: {
-            allOf: [
-                {
-                    '$ref': '#/definitions/v1.GenericConfig'
-                }
-            ],
-            description: 'Context contains workspace-level configurations, such as runtimes, topologies, and metadata, etc.'
-        },
-        resources: {
-            description: 'Resources is the list of Resource this Spec contains.',
-            items: {
-                '$ref': '#/definitions/v1.Resource'
-            },
-            type: 'array'
-        },
-        secretStore: {
-            allOf: [
-                {
-                    '$ref': '#/definitions/v1.SecretStore'
-                }
-            ],
-            description: 'SecretSore represents a external secret store location for storing secrets.'
-        }
-    },
-    type: 'object'
-} as const;
-
-export const v1_VaultKVStoreVersionSchema = {
-    enum: ['v1', 'v2'],
-    type: 'string',
-    'x-enum-varnames': ['VaultKVStoreV1', 'VaultKVStoreV2']
-} as const;
-
-export const v1_VaultProviderSchema = {
-    properties: {
-        path: {
-            description: 'Path is the mount path of the Vault KV backend endpoint, e.g: "secret".',
-            type: 'string'
-        },
-        server: {
-            description: 'Server is the target Vault server address to connect, e.g: "https://vault.example.com:8200".',
-            type: 'string'
-        },
-        version: {
-            allOf: [
-                {
-                    '$ref': '#/definitions/v1.VaultKVStoreVersion'
-                }
-            ],
-            description: `Version is the Vault KV secret engine version. Version can be either "v1" or
-"v2", defaults to "v2".`
-        }
-    },
-    type: 'object'
-} as const;
-
-export const v1_ViettelCloudProviderSchema = {
-    properties: {
-        cmpURL: {
-            description: `ViettelCloud CMP URL to be used to interact with ViettelCloud Secrets Manager.
-Examples are https://console.viettelcloud.vn/api/`,
-            type: 'string'
-        },
-        projectID: {
-            description: 'ProjectID to be used to interact with ViettelCloud Secrets Manager.',
-            type: 'string'
-        }
-    },
     type: 'object'
 } as const;

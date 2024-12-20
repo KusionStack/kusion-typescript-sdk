@@ -17,10 +17,10 @@ export enum constant_RunType {
 }
 
 export enum constant_SourceProviderType {
-    DefaultSourceType = 'git',
-    SourceProviderTypeGit = 'github',
-    SourceProviderTypeGithub = 'oci',
-    SourceProviderTypeOCI = 'local'
+    SourceProviderTypeGit = 'git',
+    SourceProviderTypeGithub = 'github',
+    SourceProviderTypeOCI = 'oci',
+    SourceProviderTypeLocal = 'local'
 }
 
 export enum constant_StackState {
@@ -48,7 +48,7 @@ export type entity_Backend = {
      * Type string `yaml:"type" json:"type"`
      * Backend is the configuration of the backend.
      */
-    backendConfig?: (v1_BackendConfig);
+    backendConfig?: (kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_BackendConfig);
     /**
      * CreationTimestamp is the timestamp of the created for the backend.
      */
@@ -241,6 +241,10 @@ export type entity_Resource = {
      * ResourceType is the type of the resource.
      */
     resourceType?: string;
+    /**
+     * ResourceURN is the urn of the resource.
+     */
+    resourceURN?: string;
     /**
      * Stack is the stack associated with the resource.
      */
@@ -487,10 +491,240 @@ export type entity_Workspace = {
     updateTimestamp?: string;
 };
 
+export type kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_AlicloudProvider = {
+    /**
+     * Alicloud Region to be used to interact with Alicloud Secrets Manager.
+     * Examples are cn-beijing, cn-shanghai, etc.
+     */
+    region?: string;
+};
+
+export type kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_AWSProvider = {
+    /**
+     * The profile to be used to interact with AWS Secrets Manager.
+     * If not set, the default profile created with `aws configure` will be used.
+     */
+    profile?: string;
+    /**
+     * AWS Region to be used to interact with AWS Secrets Manager.
+     * Examples are us-east-1, us-west-2, etc.
+     */
+    region?: string;
+};
+
+export enum kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_AzureEnvironmentType {
+    AzureEnvironmentPublicCloud = 'PublicCloud',
+    AzureEnvironmentUSGovernmentCloud = 'USGovernmentCloud',
+    AzureEnvironmentChinaCloud = 'ChinaCloud',
+    AzureEnvironmentGermanCloud = 'GermanCloud'
+}
+
+export type kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_AzureKVProvider = {
+    /**
+     * EnvironmentType specifies the Azure cloud environment endpoints to use for connecting and authenticating with Azure.
+     * By-default it points to the public cloud AAD endpoint, and the following endpoints are available:
+     * PublicCloud, USGovernmentCloud, ChinaCloud, GermanCloud
+     * Ref: https://github.com/Azure/go-autorest/blob/main/autorest/azure/environments.go#L152
+     */
+    environmentType?: (kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_AzureEnvironmentType);
+    /**
+     * TenantID configures the Azure Tenant to send requests to.
+     */
+    tenantId?: string;
+    /**
+     * Vault Url from which the secrets to be fetched from.
+     */
+    vaultUrl?: string;
+};
+
+export type kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_BackendConfig = {
+    /**
+     * Configs contains config items of the backend, whose keys differ from different backend types.
+     */
+    configs?: {
+        [key: string]: unknown;
+    };
+    /**
+     * Type is the backend type, supports BackendTypeLocal, BackendTypeOss, BackendTypeS3.
+     */
+    type?: string;
+};
+
+export type kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_Configs = {
+    /**
+     * Default is default block of the module config.
+     */
+    default?: (kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_GenericConfig);
+};
+
+export type kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_FakeProvider = {
+    data?: Array<kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_FakeProviderData>;
+};
+
+export type kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_FakeProviderData = {
+    key?: string;
+    value?: string;
+    valueMap?: {
+        [key: string]: (string);
+    };
+    version?: string;
+};
+
+export type kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_GenericConfig = {
+    [key: string]: unknown;
+};
+
+export type kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_ModuleConfig = {
+    /**
+     * Configs contains all levels of module configs
+     */
+    configs?: (kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_Configs);
+    /**
+     * Path is the path of the module. It can be a local path or a remote URL
+     */
+    path?: string;
+    /**
+     * Version is the version of the module.
+     */
+    version?: string;
+};
+
+export type kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_ModuleConfigs = {
+    [key: string]: kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_ModuleConfig;
+};
+
+export type kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_ModulePatcherConfig = {
+    /**
+     * ProjectSelector contains the selected projects.
+     */
+    projectSelector?: Array<(string)>;
+};
+
+export type kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_OnPremisesProvider = {
+    /**
+     * attributes of the provider
+     */
+    attributes?: {
+        [key: string]: (string);
+    };
+    /**
+     * platform name of the provider
+     */
+    name?: string;
+};
+
+export type kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_ProviderSpec = {
+    /**
+     * Alicloud configures a store to retrieve secrets from Alicloud Secrets Manager.
+     */
+    alicloud?: (kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_AlicloudProvider);
+    /**
+     * AWS configures a store to retrieve secrets from AWS Secrets Manager.
+     */
+    aws?: (kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_AWSProvider);
+    /**
+     * Azure configures a store to retrieve secrets from Azure KeyVault.
+     */
+    azure?: (kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_AzureKVProvider);
+    /**
+     * Fake configures a store with static key/value pairs
+     */
+    fake?: (kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_FakeProvider);
+    /**
+     * Onprem configures a store in on-premises environments
+     */
+    onpremises?: (kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_OnPremisesProvider);
+    /**
+     * Vault configures a store to retrieve secrets from HashiCorp Vault.
+     */
+    vault?: (kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_VaultProvider);
+    /**
+     * ViettelCloud configures a store to retrieve secrets from ViettelCloud Secrets Manager.
+     */
+    viettelcloud?: (kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_ViettelCloudProvider);
+};
+
+export type kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_Resource = {
+    /**
+     * Attributes represents all specified attributes of this resource
+     */
+    attributes?: unknown;
+    /**
+     * DependsOn contains all resources this resource depends on
+     */
+    dependsOn?: Array<(string)>;
+    /**
+     * Extensions specifies arbitrary metadata of this resource
+     */
+    extensions?: unknown;
+    /**
+     * ID is the unique key of this resource.
+     * ApiVersion:Kind:Namespace:Name is an idiomatic way for Kubernetes resources.
+     * providerNamespace:providerName:resourceType:resourceName for Terraform resources
+     */
+    id?: string;
+    /**
+     * Type represents all Context we supported like Kubernetes and Terraform
+     */
+    type?: (kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_Type);
+};
+
+export type kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_SecretStore = {
+    provider?: kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_ProviderSpec;
+};
+
+export type kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_Spec = {
+    /**
+     * Context contains workspace-level configurations, such as runtimes, topologies, and metadata, etc.
+     */
+    context?: (kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_GenericConfig);
+    /**
+     * Resources is the list of Resource this Spec contains.
+     */
+    resources?: Array<kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_Resource>;
+    /**
+     * SecretSore represents a external secret store location for storing secrets.
+     */
+    secretStore?: (kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_SecretStore);
+};
+
 export enum kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_Type {
     Kubernetes = 'Kubernetes',
     Terraform = 'Terraform'
 }
+
+export enum kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_VaultKVStoreVersion {
+    VaultKVStoreV1 = 'v1',
+    VaultKVStoreV2 = 'v2'
+}
+
+export type kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_VaultProvider = {
+    /**
+     * Path is the mount path of the Vault KV backend endpoint, e.g: "secret".
+     */
+    path?: string;
+    /**
+     * Server is the target Vault server address to connect, e.g: "https://vault.example.com:8200".
+     */
+    server?: string;
+    /**
+     * Version is the Vault KV secret engine version. Version can be either "v1" or
+     * "v2", defaults to "v2".
+     */
+    version?: (kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_VaultKVStoreVersion);
+};
+
+export type kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_ViettelCloudProvider = {
+    /**
+     * ViettelCloud CMP URL to be used to interact with ViettelCloud Secrets Manager.
+     * Examples are https://console.viettelcloud.vn/api/
+     */
+    cmpURL?: string;
+    /**
+     * ProjectID to be used to interact with ViettelCloud Secrets Manager.
+     */
+    projectID?: string;
+};
 
 export enum models_ActionType {
     Undefined = 0,
@@ -530,7 +764,7 @@ export type request_CreateBackendRequest = {
     /**
      * BackendConfig is the configuration of the backend.
      */
-    backendConfig?: (v1_BackendConfig);
+    backendConfig?: (kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_BackendConfig);
     /**
      * Description is a human-readable description of the backend.
      */
@@ -717,7 +951,7 @@ export type request_UpdateBackendRequest = {
     /**
      * BackendConfig is the configuration of the backend.
      */
-    backendConfig?: (v1_BackendConfig);
+    backendConfig?: (kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_BackendConfig);
     /**
      * Description is a human-readable description of the backend.
      */
@@ -924,15 +1158,15 @@ export type request_WorkspaceConfigs = {
     /**
      * Context contains workspace-level configurations, such as runtimes, topologies, and metadata, etc.
      */
-    context?: (v1_GenericConfig);
+    context?: (kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_GenericConfig);
     /**
      * Modules are the configs of a set of modules.
      */
-    modules?: (v1_ModuleConfigs);
+    modules?: (kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_ModuleConfigs);
     /**
      * SecretStore represents a secure external location for storing secrets.
      */
-    secretStore?: (v1_SecretStore);
+    secretStore?: (kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_SecretStore);
 };
 
 export type url_URL = {
@@ -980,236 +1214,6 @@ export type url_URL = {
 };
 
 export type url_Userinfo = unknown;
-
-export type v1_AlicloudProvider = {
-    /**
-     * Alicloud Region to be used to interact with Alicloud Secrets Manager.
-     * Examples are cn-beijing, cn-shanghai, etc.
-     */
-    region?: string;
-};
-
-export type v1_AWSProvider = {
-    /**
-     * The profile to be used to interact with AWS Secrets Manager.
-     * If not set, the default profile created with `aws configure` will be used.
-     */
-    profile?: string;
-    /**
-     * AWS Region to be used to interact with AWS Secrets Manager.
-     * Examples are us-east-1, us-west-2, etc.
-     */
-    region?: string;
-};
-
-export enum v1_AzureEnvironmentType {
-    AzureEnvironmentPublicCloud = 'PublicCloud',
-    AzureEnvironmentUSGovernmentCloud = 'USGovernmentCloud',
-    AzureEnvironmentChinaCloud = 'ChinaCloud',
-    AzureEnvironmentGermanCloud = 'GermanCloud'
-}
-
-export type v1_AzureKVProvider = {
-    /**
-     * EnvironmentType specifies the Azure cloud environment endpoints to use for connecting and authenticating with Azure.
-     * By-default it points to the public cloud AAD endpoint, and the following endpoints are available:
-     * PublicCloud, USGovernmentCloud, ChinaCloud, GermanCloud
-     * Ref: https://github.com/Azure/go-autorest/blob/main/autorest/azure/environments.go#L152
-     */
-    environmentType?: (v1_AzureEnvironmentType);
-    /**
-     * TenantID configures the Azure Tenant to send requests to.
-     */
-    tenantId?: string;
-    /**
-     * Vault Url from which the secrets to be fetched from.
-     */
-    vaultUrl?: string;
-};
-
-export type v1_BackendConfig = {
-    /**
-     * Configs contains config items of the backend, whose keys differ from different backend types.
-     */
-    configs?: {
-        [key: string]: unknown;
-    };
-    /**
-     * Type is the backend type, supports BackendTypeLocal, BackendTypeOss, BackendTypeS3.
-     */
-    type?: string;
-};
-
-export type v1_Configs = {
-    /**
-     * Default is default block of the module config.
-     */
-    default?: (v1_GenericConfig);
-};
-
-export type v1_FakeProvider = {
-    data?: Array<v1_FakeProviderData>;
-};
-
-export type v1_FakeProviderData = {
-    key?: string;
-    value?: string;
-    valueMap?: {
-        [key: string]: (string);
-    };
-    version?: string;
-};
-
-export type v1_GenericConfig = {
-    [key: string]: unknown;
-};
-
-export type v1_ModuleConfig = {
-    /**
-     * Configs contains all levels of module configs
-     */
-    configs?: (v1_Configs);
-    /**
-     * Path is the path of the module. It can be a local path or a remote URL
-     */
-    path?: string;
-    /**
-     * Version is the version of the module.
-     */
-    version?: string;
-};
-
-export type v1_ModuleConfigs = {
-    [key: string]: v1_ModuleConfig;
-};
-
-export type v1_ModulePatcherConfig = {
-    /**
-     * ProjectSelector contains the selected projects.
-     */
-    projectSelector?: Array<(string)>;
-};
-
-export type v1_OnPremisesProvider = {
-    /**
-     * attributes of the provider
-     */
-    attributes?: {
-        [key: string]: (string);
-    };
-    /**
-     * platform name of the provider
-     */
-    name?: string;
-};
-
-export type v1_ProviderSpec = {
-    /**
-     * Alicloud configures a store to retrieve secrets from Alicloud Secrets Manager.
-     */
-    alicloud?: (v1_AlicloudProvider);
-    /**
-     * AWS configures a store to retrieve secrets from AWS Secrets Manager.
-     */
-    aws?: (v1_AWSProvider);
-    /**
-     * Azure configures a store to retrieve secrets from Azure KeyVault.
-     */
-    azure?: (v1_AzureKVProvider);
-    /**
-     * Fake configures a store with static key/value pairs
-     */
-    fake?: (v1_FakeProvider);
-    /**
-     * Onprem configures a store in on-premises environments
-     */
-    onpremises?: (v1_OnPremisesProvider);
-    /**
-     * Vault configures a store to retrieve secrets from HashiCorp Vault.
-     */
-    vault?: (v1_VaultProvider);
-    /**
-     * ViettelCloud configures a store to retrieve secrets from ViettelCloud Secrets Manager.
-     */
-    viettelcloud?: (v1_ViettelCloudProvider);
-};
-
-export type v1_Resource = {
-    /**
-     * Attributes represents all specified attributes of this resource
-     */
-    attributes?: unknown;
-    /**
-     * DependsOn contains all resources this resource depends on
-     */
-    dependsOn?: Array<(string)>;
-    /**
-     * Extensions specifies arbitrary metadata of this resource
-     */
-    extensions?: unknown;
-    /**
-     * ID is the unique key of this resource.
-     * ApiVersion:Kind:Namespace:Name is an idiomatic way for Kubernetes resources.
-     * providerNamespace:providerName:resourceType:resourceName for Terraform resources
-     */
-    id?: string;
-    /**
-     * Type represents all Context we supported like Kubernetes and Terraform
-     */
-    type?: (kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_Type);
-};
-
-export type v1_SecretStore = {
-    provider?: v1_ProviderSpec;
-};
-
-export type v1_Spec = {
-    /**
-     * Context contains workspace-level configurations, such as runtimes, topologies, and metadata, etc.
-     */
-    context?: (v1_GenericConfig);
-    /**
-     * Resources is the list of Resource this Spec contains.
-     */
-    resources?: Array<v1_Resource>;
-    /**
-     * SecretSore represents a external secret store location for storing secrets.
-     */
-    secretStore?: (v1_SecretStore);
-};
-
-export enum v1_VaultKVStoreVersion {
-    VaultKVStoreV1 = 'v1',
-    VaultKVStoreV2 = 'v2'
-}
-
-export type v1_VaultProvider = {
-    /**
-     * Path is the mount path of the Vault KV backend endpoint, e.g: "secret".
-     */
-    path?: string;
-    /**
-     * Server is the target Vault server address to connect, e.g: "https://vault.example.com:8200".
-     */
-    server?: string;
-    /**
-     * Version is the Vault KV secret engine version. Version can be either "v1" or
-     * "v2", defaults to "v2".
-     */
-    version?: (v1_VaultKVStoreVersion);
-};
-
-export type v1_ViettelCloudProvider = {
-    /**
-     * ViettelCloud CMP URL to be used to interact with ViettelCloud Secrets Manager.
-     * Examples are https://console.viettelcloud.vn/api/
-     */
-    cmpURL?: string;
-    /**
-     * ProjectID to be used to interact with ViettelCloud Secrets Manager.
-     */
-    projectID?: string;
-};
 
 export type ListBackendResponse = (entity_Backend);
 
@@ -1275,6 +1279,10 @@ export type GetEndpointsError = unknown;
 
 export type ListModuleData = {
     query?: {
+        /**
+         * Module name to filter module list by. Default to all modules.
+         */
+        moduleName?: string;
         /**
          * Workspace ID to filter module list by. Default to all workspaces.
          */
@@ -1525,6 +1533,15 @@ export type GetRunResultResponse = (entity_Run);
 
 export type GetRunResultError = (unknown);
 
+export type ListSourceData = {
+    query?: {
+        /**
+         * Source name to filter source list by. Default to all sources.
+         */
+        sourceName?: string;
+    };
+};
+
 export type ListSourceResponse = (entity_Source);
 
 export type ListSourceError = (unknown);
@@ -1590,6 +1607,10 @@ export type ListRunData = {
          */
         cloud?: string;
         /**
+         * EndTime to filter runs by. Default to all. Format: RFC3339
+         */
+        endTime?: string;
+        /**
          * Environment to filter runs by. Default to all
          */
         env?: string;
@@ -1605,6 +1626,18 @@ export type ListRunData = {
          * ProjectName to filter runs by. Default to all
          */
         projectName?: string;
+        /**
+         * StartTime to filter runs by. Default to all. Format: RFC3339
+         */
+        startTime?: string;
+        /**
+         * RunStatus to filter runs by. Default to all
+         */
+        status?: Array<string>;
+        /**
+         * RunType to filter runs by. Default to all
+         */
+        type?: Array<string>;
     };
 };
 
@@ -1860,7 +1893,7 @@ export type GenerateStackData = {
     };
 };
 
-export type GenerateStackResponse = (v1_Spec);
+export type GenerateStackResponse = (kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_Spec);
 
 export type GenerateStackError = (unknown);
 
@@ -1887,7 +1920,7 @@ export type GenerateStackAsyncData = {
     };
 };
 
-export type GenerateStackAsyncResponse = (v1_Spec);
+export type GenerateStackAsyncResponse = (kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_Spec);
 
 export type GenerateStackAsyncError = (unknown);
 

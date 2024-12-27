@@ -17,10 +17,10 @@ export enum constant_RunType {
 }
 
 export enum constant_SourceProviderType {
-    SourceProviderTypeGit = 'git',
-    SourceProviderTypeGithub = 'github',
-    SourceProviderTypeOCI = 'oci',
-    SourceProviderTypeLocal = 'local'
+    DefaultSourceType = 'git',
+    SourceProviderTypeGit = 'github',
+    SourceProviderTypeGithub = 'oci',
+    SourceProviderTypeOCI = 'local'
 }
 
 export enum constant_StackState {
@@ -92,6 +92,33 @@ export type entity_Module = {
      * URL is the module oci artifact registry URL.
      */
     url?: (url_URL);
+};
+
+export type entity_ModuleWithVersion = {
+    /**
+     * Description is a human-readable description of the module.
+     */
+    description?: string;
+    /**
+     * Doc is the documentation URL of the module.
+     */
+    doc?: (url_URL);
+    /**
+     * Name is the module name.
+     */
+    name?: string;
+    /**
+     * Owners is a list of owners for the module.
+     */
+    owners?: Array<(string)>;
+    /**
+     * URL is the module oci artifact registry URL.
+     */
+    url?: (url_URL);
+    /**
+     * Version is the module oci artifact version.
+     */
+    version?: string;
 };
 
 export type entity_Organization = {
@@ -489,6 +516,48 @@ export type entity_Workspace = {
      * UpdateTimestamp is the timestamp of the updated for the workspace.
      */
     updateTimestamp?: string;
+};
+
+export enum handler_Duration {
+    minDuration = -9223372036854776000,
+    maxDuration = 9223372036854776000,
+    Nanosecond = 1,
+    Microsecond = 1000,
+    Millisecond = 1000000,
+    Second = 1000000000,
+    Minute = 60000000000,
+    Hour = 3600000000000
+}
+
+export type handler_Response = {
+    /**
+     * Time taken for the request.
+     */
+    costTime?: (handler_Duration);
+    /**
+     * Data payload.
+     */
+    data?: unknown;
+    /**
+     * Request end time.
+     */
+    endTime?: string;
+    /**
+     * Descriptive message.
+     */
+    message?: string;
+    /**
+     * Request start time.
+     */
+    startTime?: string;
+    /**
+     * Indicates success status.
+     */
+    success?: boolean;
+    /**
+     * Trace identifier.
+     */
+    traceID?: string;
 };
 
 export type kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_AlicloudProvider = {
@@ -1169,6 +1238,70 @@ export type request_WorkspaceConfigs = {
     secretStore?: (kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_SecretStore);
 };
 
+export type response_PaginatedBackendResponse = {
+    backends?: Array<entity_Backend>;
+    currentPage?: number;
+    pageSize?: number;
+    total?: number;
+};
+
+export type response_PaginatedModuleResponse = {
+    currentPage?: number;
+    modules?: Array<entity_Module>;
+    modulesWithVersion?: Array<entity_ModuleWithVersion>;
+    pageSize?: number;
+    total?: number;
+};
+
+export type response_PaginatedOrganizationResponse = {
+    currentPage?: number;
+    organizations?: Array<entity_Organization>;
+    pageSize?: number;
+    total?: number;
+};
+
+export type response_PaginatedProjectResponse = {
+    currentPage?: number;
+    pageSize?: number;
+    projects?: Array<entity_Project>;
+    total?: number;
+};
+
+export type response_PaginatedResourceResponse = {
+    currentPage?: number;
+    pageSize?: number;
+    resources?: Array<entity_Resource>;
+    total?: number;
+};
+
+export type response_PaginatedRunResponse = {
+    currentPage?: number;
+    pageSize?: number;
+    runs?: Array<entity_Run>;
+    total?: number;
+};
+
+export type response_PaginatedSourceResponse = {
+    currentPage?: number;
+    pageSize?: number;
+    sources?: Array<entity_Source>;
+    total?: number;
+};
+
+export type response_PaginatedStackResponse = {
+    currentPage?: number;
+    pageSize?: number;
+    stacks?: Array<entity_Stack>;
+    total?: number;
+};
+
+export type response_PaginatedWorkspaceResponse = {
+    currentPage?: number;
+    pageSize?: number;
+    total?: number;
+    workspaces?: Array<entity_Workspace>;
+};
+
 export type url_URL = {
     /**
      * append a query ('?') even if RawQuery is empty
@@ -1215,7 +1348,22 @@ export type url_URL = {
 
 export type url_Userinfo = unknown;
 
-export type ListBackendResponse = (entity_Backend);
+export type ListBackendData = {
+    query?: {
+        /**
+         * The current page to fetch. Default to 1
+         */
+        page?: number;
+        /**
+         * The size of the page. Default to 10
+         */
+        pageSize?: number;
+    };
+};
+
+export type ListBackendResponse = ((handler_Response & {
+    data?: response_PaginatedBackendResponse;
+}));
 
 export type ListBackendError = (unknown);
 
@@ -1226,7 +1374,9 @@ export type CreateBackendData = {
     body: request_CreateBackendRequest;
 };
 
-export type CreateBackendResponse = (entity_Backend);
+export type CreateBackendResponse = ((handler_Response & {
+    data?: entity_Backend;
+}));
 
 export type CreateBackendError = (unknown);
 
@@ -1239,7 +1389,9 @@ export type DeleteBackendData = {
     };
 };
 
-export type DeleteBackendResponse = (string);
+export type DeleteBackendResponse = ((handler_Response & {
+    data?: string;
+}));
 
 export type DeleteBackendError = (unknown);
 
@@ -1252,7 +1404,9 @@ export type GetBackendData = {
     };
 };
 
-export type GetBackendResponse = (entity_Backend);
+export type GetBackendResponse = ((handler_Response & {
+    data?: entity_Backend;
+}));
 
 export type GetBackendError = (unknown);
 
@@ -1269,7 +1423,9 @@ export type UpdateBackendData = {
     };
 };
 
-export type UpdateBackendResponse = (entity_Backend);
+export type UpdateBackendResponse = ((handler_Response & {
+    data?: entity_Backend;
+}));
 
 export type UpdateBackendError = (unknown);
 
@@ -1284,13 +1440,23 @@ export type ListModuleData = {
          */
         moduleName?: string;
         /**
+         * The current page to fetch. Default to 1
+         */
+        page?: number;
+        /**
+         * The size of the page. Default to 10
+         */
+        pageSize?: number;
+        /**
          * Workspace ID to filter module list by. Default to all workspaces.
          */
         workspaceID?: number;
     };
 };
 
-export type ListModuleResponse = (Array<entity_Module>);
+export type ListModuleResponse = ((handler_Response & {
+    data?: response_PaginatedModuleResponse;
+}));
 
 export type ListModuleError = (unknown);
 
@@ -1301,7 +1467,9 @@ export type CreateModuleData = {
     body: request_CreateModuleRequest;
 };
 
-export type CreateModuleResponse = (entity_Module);
+export type CreateModuleResponse = ((handler_Response & {
+    data?: entity_Module;
+}));
 
 export type CreateModuleError = (unknown);
 
@@ -1314,7 +1482,9 @@ export type DeleteModuleData = {
     };
 };
 
-export type DeleteModuleResponse = (string);
+export type DeleteModuleResponse = ((handler_Response & {
+    data?: string;
+}));
 
 export type DeleteModuleError = (unknown);
 
@@ -1327,7 +1497,9 @@ export type GetModuleData = {
     };
 };
 
-export type GetModuleResponse = (entity_Module);
+export type GetModuleResponse = ((handler_Response & {
+    data?: entity_Module;
+}));
 
 export type GetModuleError = (unknown);
 
@@ -1344,11 +1516,28 @@ export type UpdateModuleData = {
     };
 };
 
-export type UpdateModuleResponse = (entity_Module);
+export type UpdateModuleResponse = ((handler_Response & {
+    data?: entity_Module;
+}));
 
 export type UpdateModuleError = (unknown);
 
-export type ListOrganizationResponse = (Array<entity_Organization>);
+export type ListOrganizationData = {
+    query?: {
+        /**
+         * The current page to fetch. Default to 1
+         */
+        page?: number;
+        /**
+         * The size of the page. Default to 10
+         */
+        pageSize?: number;
+    };
+};
+
+export type ListOrganizationResponse = ((handler_Response & {
+    data?: response_PaginatedOrganizationResponse;
+}));
 
 export type ListOrganizationError = (unknown);
 
@@ -1359,7 +1548,9 @@ export type CreateOrganizationData = {
     body: request_CreateOrganizationRequest;
 };
 
-export type CreateOrganizationResponse = (entity_Organization);
+export type CreateOrganizationResponse = ((handler_Response & {
+    data?: entity_Organization;
+}));
 
 export type CreateOrganizationError = (unknown);
 
@@ -1372,7 +1563,9 @@ export type DeleteOrganizationData = {
     };
 };
 
-export type DeleteOrganizationResponse = (string);
+export type DeleteOrganizationResponse = ((handler_Response & {
+    data?: string;
+}));
 
 export type DeleteOrganizationError = (unknown);
 
@@ -1385,7 +1578,9 @@ export type GetOrganizationData = {
     };
 };
 
-export type GetOrganizationResponse = (entity_Organization);
+export type GetOrganizationResponse = ((handler_Response & {
+    data?: entity_Organization;
+}));
 
 export type GetOrganizationError = (unknown);
 
@@ -1402,7 +1597,9 @@ export type UpdateOrganizationData = {
     };
 };
 
-export type UpdateOrganizationResponse = (entity_Organization);
+export type UpdateOrganizationResponse = ((handler_Response & {
+    data?: entity_Organization;
+}));
 
 export type UpdateOrganizationError = (unknown);
 
@@ -1416,10 +1613,20 @@ export type ListProjectData = {
          * OrganizationID to filter project list by. Default to all projects.
          */
         orgID?: number;
+        /**
+         * The current page to fetch. Default to 1
+         */
+        page?: number;
+        /**
+         * The size of the page. Default to 10
+         */
+        pageSize?: number;
     };
 };
 
-export type ListProjectResponse = (Array<entity_Project>);
+export type ListProjectResponse = ((handler_Response & {
+    data?: Array<response_PaginatedProjectResponse>;
+}));
 
 export type ListProjectError = (unknown);
 
@@ -1430,7 +1637,9 @@ export type CreateProjectData = {
     body: request_CreateProjectRequest;
 };
 
-export type CreateProjectResponse = (entity_Project);
+export type CreateProjectResponse = ((handler_Response & {
+    data?: entity_Project;
+}));
 
 export type CreateProjectError = (unknown);
 
@@ -1443,7 +1652,9 @@ export type DeleteProjectData = {
     };
 };
 
-export type DeleteProjectResponse = (string);
+export type DeleteProjectResponse = ((handler_Response & {
+    data?: string;
+}));
 
 export type DeleteProjectError = (unknown);
 
@@ -1456,7 +1667,9 @@ export type GetProjectData = {
     };
 };
 
-export type GetProjectResponse = (entity_Project);
+export type GetProjectResponse = ((handler_Response & {
+    data?: entity_Project;
+}));
 
 export type GetProjectError = (unknown);
 
@@ -1473,11 +1686,28 @@ export type UpdateProjectData = {
     };
 };
 
-export type UpdateProjectResponse = (entity_Project);
+export type UpdateProjectResponse = ((handler_Response & {
+    data?: entity_Project;
+}));
 
 export type UpdateProjectError = (unknown);
 
-export type ListResourceResponse = (entity_Resource);
+export type ListResourceData = {
+    query?: {
+        /**
+         * The current page to fetch. Default to 1
+         */
+        page?: number;
+        /**
+         * The size of the page. Default to 10
+         */
+        pageSize?: number;
+    };
+};
+
+export type ListResourceResponse = ((handler_Response & {
+    data?: Array<response_PaginatedResourceResponse>;
+}));
 
 export type ListResourceError = (unknown);
 
@@ -1490,7 +1720,9 @@ export type GetResourceData = {
     };
 };
 
-export type GetResourceResponse = (entity_Resource);
+export type GetResourceResponse = ((handler_Response & {
+    data?: entity_Resource;
+}));
 
 export type GetResourceError = (unknown);
 
@@ -1503,7 +1735,9 @@ export type GetResourceGraphData = {
     };
 };
 
-export type GetResourceGraphResponse = (entity_ResourceGraph);
+export type GetResourceGraphResponse = ((handler_Response & {
+    data?: entity_ResourceGraph;
+}));
 
 export type GetResourceGraphError = (unknown);
 
@@ -1516,7 +1750,9 @@ export type GetRunData = {
     };
 };
 
-export type GetRunResponse = (entity_Run);
+export type GetRunResponse = ((handler_Response & {
+    data?: entity_Run;
+}));
 
 export type GetRunError = (unknown);
 
@@ -1529,12 +1765,22 @@ export type GetRunResultData = {
     };
 };
 
-export type GetRunResultResponse = (entity_Run);
+export type GetRunResultResponse = ((handler_Response & {
+    data?: unknown;
+}));
 
 export type GetRunResultError = (unknown);
 
 export type ListSourceData = {
     query?: {
+        /**
+         * The current page to fetch. Default to 1
+         */
+        page?: number;
+        /**
+         * The size of the page. Default to 10
+         */
+        pageSize?: number;
         /**
          * Source name to filter source list by. Default to all sources.
          */
@@ -1542,7 +1788,9 @@ export type ListSourceData = {
     };
 };
 
-export type ListSourceResponse = (entity_Source);
+export type ListSourceResponse = ((handler_Response & {
+    data?: response_PaginatedSourceResponse;
+}));
 
 export type ListSourceError = (unknown);
 
@@ -1553,7 +1801,9 @@ export type CreateSourceData = {
     body: request_CreateSourceRequest;
 };
 
-export type CreateSourceResponse = (entity_Source);
+export type CreateSourceResponse = ((handler_Response & {
+    data?: entity_Source;
+}));
 
 export type CreateSourceError = (unknown);
 
@@ -1566,7 +1816,9 @@ export type DeleteSourceData = {
     };
 };
 
-export type DeleteSourceResponse = (entity_Source);
+export type DeleteSourceResponse = ((handler_Response & {
+    data?: string;
+}));
 
 export type DeleteSourceError = (unknown);
 
@@ -1579,7 +1831,9 @@ export type GetSourceData = {
     };
 };
 
-export type GetSourceResponse = (entity_Source);
+export type GetSourceResponse = ((handler_Response & {
+    data?: entity_Source;
+}));
 
 export type GetSourceError = (unknown);
 
@@ -1596,7 +1850,9 @@ export type UpdateSourceData = {
     };
 };
 
-export type UpdateSourceResponse = (entity_Source);
+export type UpdateSourceResponse = ((handler_Response & {
+    data?: entity_Source;
+}));
 
 export type UpdateSourceError = (unknown);
 
@@ -1619,6 +1875,14 @@ export type ListRunData = {
          */
         orgID?: number;
         /**
+         * The current page to fetch. Default to 1
+         */
+        page?: number;
+        /**
+         * The size of the page. Default to 10
+         */
+        pageSize?: number;
+        /**
          * ProjectID to filter runs by. Default to all
          */
         projectID?: number;
@@ -1626,6 +1890,10 @@ export type ListRunData = {
          * ProjectName to filter runs by. Default to all
          */
         projectName?: string;
+        /**
+         * StackID to filter runs by. Default to all
+         */
+        stackID?: number;
         /**
          * StartTime to filter runs by. Default to all. Format: RFC3339
          */
@@ -1638,10 +1906,16 @@ export type ListRunData = {
          * RunType to filter runs by. Default to all
          */
         type?: Array<string>;
+        /**
+         * Workspace to filter runs by. Default to all
+         */
+        workspace?: string;
     };
 };
 
-export type ListRunResponse = (Array<entity_Stack>);
+export type ListRunResponse = ((handler_Response & {
+    data?: response_PaginatedRunResponse;
+}));
 
 export type ListRunError = (unknown);
 
@@ -1660,6 +1934,14 @@ export type ListStackData = {
          */
         orgID?: number;
         /**
+         * The current page to fetch. Default to 1
+         */
+        page?: number;
+        /**
+         * The size of the page. Default to 10
+         */
+        pageSize?: number;
+        /**
          * ProjectID to filter stacks by. Default to all
          */
         projectID?: number;
@@ -1670,7 +1952,9 @@ export type ListStackData = {
     };
 };
 
-export type ListStackResponse = (Array<entity_Stack>);
+export type ListStackResponse = ((handler_Response & {
+    data?: response_PaginatedStackResponse;
+}));
 
 export type ListStackError = (unknown);
 
@@ -1691,7 +1975,9 @@ export type CreateStackData = {
     };
 };
 
-export type CreateStackResponse = (entity_Stack);
+export type CreateStackResponse = ((handler_Response & {
+    data?: entity_Stack;
+}));
 
 export type CreateStackError = (unknown);
 
@@ -1704,7 +1990,9 @@ export type DeleteStackData = {
     };
 };
 
-export type DeleteStackResponse = (string);
+export type DeleteStackResponse = ((handler_Response & {
+    data?: string;
+}));
 
 export type DeleteStackError = (unknown);
 
@@ -1717,7 +2005,9 @@ export type GetStackData = {
     };
 };
 
-export type GetStackResponse = (entity_Stack);
+export type GetStackResponse = ((handler_Response & {
+    data?: entity_Stack;
+}));
 
 export type GetStackError = (unknown);
 
@@ -1734,7 +2024,9 @@ export type UpdateStackData = {
     };
 };
 
-export type UpdateStackResponse = (entity_Stack);
+export type UpdateStackResponse = ((handler_Response & {
+    data?: entity_Stack;
+}));
 
 export type UpdateStackError = (unknown);
 
@@ -1773,7 +2065,9 @@ export type ApplyStackData = {
     };
 };
 
-export type ApplyStackResponse = (string);
+export type ApplyStackResponse = ((handler_Response & {
+    data?: string;
+}));
 
 export type ApplyStackError = (unknown);
 
@@ -1812,7 +2106,9 @@ export type ApplyStackAsyncData = {
     };
 };
 
-export type ApplyStackAsyncResponse = (entity_Run);
+export type ApplyStackAsyncResponse = ((handler_Response & {
+    data?: entity_Run;
+}));
 
 export type ApplyStackAsyncError = (unknown);
 
@@ -1839,7 +2135,9 @@ export type DestroyStackData = {
     };
 };
 
-export type DestroyStackResponse = (string);
+export type DestroyStackResponse = ((handler_Response & {
+    data?: string;
+}));
 
 export type DestroyStackError = (unknown);
 
@@ -1866,7 +2164,9 @@ export type DestroyStackAsyncData = {
     };
 };
 
-export type DestroyStackAsyncResponse = (string);
+export type DestroyStackAsyncResponse = ((handler_Response & {
+    data?: entity_Run;
+}));
 
 export type DestroyStackAsyncError = (unknown);
 
@@ -1893,7 +2193,9 @@ export type GenerateStackData = {
     };
 };
 
-export type GenerateStackResponse = (kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_Spec);
+export type GenerateStackResponse = ((handler_Response & {
+    data?: kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_Spec;
+}));
 
 export type GenerateStackError = (unknown);
 
@@ -1920,7 +2222,9 @@ export type GenerateStackAsyncData = {
     };
 };
 
-export type GenerateStackAsyncResponse = (kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_Spec);
+export type GenerateStackAsyncResponse = ((handler_Response & {
+    data?: entity_Run;
+}));
 
 export type GenerateStackAsyncError = (unknown);
 
@@ -1963,11 +2267,28 @@ export type PreviewStackAsyncData = {
     };
 };
 
-export type PreviewStackAsyncResponse = (entity_Run);
+export type PreviewStackAsyncResponse = ((handler_Response & {
+    data?: entity_Run;
+}));
 
 export type PreviewStackAsyncError = (unknown);
 
-export type ListWorkspaceResponse = (entity_Workspace);
+export type ListWorkspaceData = {
+    query?: {
+        /**
+         * The current page to fetch. Default to 1
+         */
+        page?: number;
+        /**
+         * The size of the page. Default to 10
+         */
+        pageSize?: number;
+    };
+};
+
+export type ListWorkspaceResponse = ((handler_Response & {
+    data?: response_PaginatedWorkspaceResponse;
+}));
 
 export type ListWorkspaceError = (unknown);
 
@@ -1978,7 +2299,9 @@ export type CreateWorkspaceData = {
     body: request_CreateWorkspaceRequest;
 };
 
-export type CreateWorkspaceResponse = (entity_Workspace);
+export type CreateWorkspaceResponse = ((handler_Response & {
+    data?: entity_Workspace;
+}));
 
 export type CreateWorkspaceError = (unknown);
 
@@ -1991,7 +2314,9 @@ export type DeleteWorkspaceData = {
     };
 };
 
-export type DeleteWorkspaceResponse = (string);
+export type DeleteWorkspaceResponse = ((handler_Response & {
+    data?: string;
+}));
 
 export type DeleteWorkspaceError = (unknown);
 
@@ -2004,7 +2329,9 @@ export type GetWorkspaceData = {
     };
 };
 
-export type GetWorkspaceResponse = (entity_Workspace);
+export type GetWorkspaceResponse = ((handler_Response & {
+    data?: entity_Workspace;
+}));
 
 export type GetWorkspaceError = (unknown);
 
@@ -2021,7 +2348,9 @@ export type UpdateWorkspaceData = {
     };
 };
 
-export type UpdateWorkspaceResponse = (entity_Workspace);
+export type UpdateWorkspaceResponse = ((handler_Response & {
+    data?: entity_Workspace;
+}));
 
 export type UpdateWorkspaceError = (unknown);
 

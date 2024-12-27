@@ -13,9 +13,9 @@ export const constant_RunTypeSchema = {
 } as const;
 
 export const constant_SourceProviderTypeSchema = {
-    enum: ['git', 'github', 'oci', 'local', 'git'],
+    enum: ['git', 'git', 'github', 'oci', 'local'],
     type: 'string',
-    'x-enum-varnames': ['SourceProviderTypeGit', 'SourceProviderTypeGithub', 'SourceProviderTypeOCI', 'SourceProviderTypeLocal', 'DefaultSourceType']
+    'x-enum-varnames': ['DefaultSourceType', 'SourceProviderTypeGit', 'SourceProviderTypeGithub', 'SourceProviderTypeOCI', 'SourceProviderTypeLocal']
 } as const;
 
 export const constant_StackStateSchema = {
@@ -92,6 +92,47 @@ export const entity_ModuleSchema = {
                 }
             ],
             description: 'URL is the module oci artifact registry URL.'
+        }
+    },
+    type: 'object'
+} as const;
+
+export const entity_ModuleWithVersionSchema = {
+    properties: {
+        description: {
+            description: 'Description is a human-readable description of the module.',
+            type: 'string'
+        },
+        doc: {
+            allOf: [
+                {
+                    '$ref': '#/definitions/url.URL'
+                }
+            ],
+            description: 'Doc is the documentation URL of the module.'
+        },
+        name: {
+            description: 'Name is the module name.',
+            type: 'string'
+        },
+        owners: {
+            description: 'Owners is a list of owners for the module.',
+            items: {
+                type: 'string'
+            },
+            type: 'array'
+        },
+        url: {
+            allOf: [
+                {
+                    '$ref': '#/definitions/url.URL'
+                }
+            ],
+            description: 'URL is the module oci artifact registry URL.'
+        },
+        version: {
+            description: 'Version is the module oci artifact version.',
+            type: 'string'
         }
     },
     type: 'object'
@@ -617,6 +658,49 @@ export const entity_WorkspaceSchema = {
         },
         updateTimestamp: {
             description: 'UpdateTimestamp is the timestamp of the updated for the workspace.',
+            type: 'string'
+        }
+    },
+    type: 'object'
+} as const;
+
+export const handler_DurationSchema = {
+    enum: [-9223372036854776000, 9223372036854776000, 1, 1000, 1000000, 1000000000, 60000000000, 3600000000000],
+    type: 'integer',
+    'x-enum-varnames': ['minDuration', 'maxDuration', 'Nanosecond', 'Microsecond', 'Millisecond', 'Second', 'Minute', 'Hour']
+} as const;
+
+export const handler_ResponseSchema = {
+    properties: {
+        costTime: {
+            allOf: [
+                {
+                    '$ref': '#/definitions/handler.Duration'
+                }
+            ],
+            description: 'Time taken for the request.'
+        },
+        data: {
+            description: 'Data payload.'
+        },
+        endTime: {
+            description: 'Request end time.',
+            type: 'string'
+        },
+        message: {
+            description: 'Descriptive message.',
+            type: 'string'
+        },
+        startTime: {
+            description: 'Request start time.',
+            type: 'string'
+        },
+        success: {
+            description: 'Indicates success status.',
+            type: 'boolean'
+        },
+        traceID: {
+            description: 'Trace identifier.',
             type: 'string'
         }
     },
@@ -1602,6 +1686,201 @@ export const request_WorkspaceConfigsSchema = {
                 }
             ],
             description: 'SecretStore represents a secure external location for storing secrets.'
+        }
+    },
+    type: 'object'
+} as const;
+
+export const response_PaginatedBackendResponseSchema = {
+    properties: {
+        backends: {
+            items: {
+                '$ref': '#/definitions/entity.Backend'
+            },
+            type: 'array'
+        },
+        currentPage: {
+            type: 'integer'
+        },
+        pageSize: {
+            type: 'integer'
+        },
+        total: {
+            type: 'integer'
+        }
+    },
+    type: 'object'
+} as const;
+
+export const response_PaginatedModuleResponseSchema = {
+    properties: {
+        currentPage: {
+            type: 'integer'
+        },
+        modules: {
+            items: {
+                '$ref': '#/definitions/entity.Module'
+            },
+            type: 'array'
+        },
+        modulesWithVersion: {
+            items: {
+                '$ref': '#/definitions/entity.ModuleWithVersion'
+            },
+            type: 'array'
+        },
+        pageSize: {
+            type: 'integer'
+        },
+        total: {
+            type: 'integer'
+        }
+    },
+    type: 'object'
+} as const;
+
+export const response_PaginatedOrganizationResponseSchema = {
+    properties: {
+        currentPage: {
+            type: 'integer'
+        },
+        organizations: {
+            items: {
+                '$ref': '#/definitions/entity.Organization'
+            },
+            type: 'array'
+        },
+        pageSize: {
+            type: 'integer'
+        },
+        total: {
+            type: 'integer'
+        }
+    },
+    type: 'object'
+} as const;
+
+export const response_PaginatedProjectResponseSchema = {
+    properties: {
+        currentPage: {
+            type: 'integer'
+        },
+        pageSize: {
+            type: 'integer'
+        },
+        projects: {
+            items: {
+                '$ref': '#/definitions/entity.Project'
+            },
+            type: 'array'
+        },
+        total: {
+            type: 'integer'
+        }
+    },
+    type: 'object'
+} as const;
+
+export const response_PaginatedResourceResponseSchema = {
+    properties: {
+        currentPage: {
+            type: 'integer'
+        },
+        pageSize: {
+            type: 'integer'
+        },
+        resources: {
+            items: {
+                '$ref': '#/definitions/entity.Resource'
+            },
+            type: 'array'
+        },
+        total: {
+            type: 'integer'
+        }
+    },
+    type: 'object'
+} as const;
+
+export const response_PaginatedRunResponseSchema = {
+    properties: {
+        currentPage: {
+            type: 'integer'
+        },
+        pageSize: {
+            type: 'integer'
+        },
+        runs: {
+            items: {
+                '$ref': '#/definitions/entity.Run'
+            },
+            type: 'array'
+        },
+        total: {
+            type: 'integer'
+        }
+    },
+    type: 'object'
+} as const;
+
+export const response_PaginatedSourceResponseSchema = {
+    properties: {
+        currentPage: {
+            type: 'integer'
+        },
+        pageSize: {
+            type: 'integer'
+        },
+        sources: {
+            items: {
+                '$ref': '#/definitions/entity.Source'
+            },
+            type: 'array'
+        },
+        total: {
+            type: 'integer'
+        }
+    },
+    type: 'object'
+} as const;
+
+export const response_PaginatedStackResponseSchema = {
+    properties: {
+        currentPage: {
+            type: 'integer'
+        },
+        pageSize: {
+            type: 'integer'
+        },
+        stacks: {
+            items: {
+                '$ref': '#/definitions/entity.Stack'
+            },
+            type: 'array'
+        },
+        total: {
+            type: 'integer'
+        }
+    },
+    type: 'object'
+} as const;
+
+export const response_PaginatedWorkspaceResponseSchema = {
+    properties: {
+        currentPage: {
+            type: 'integer'
+        },
+        pageSize: {
+            type: 'integer'
+        },
+        total: {
+            type: 'integer'
+        },
+        workspaces: {
+            items: {
+                '$ref': '#/definitions/entity.Workspace'
+            },
+            type: 'array'
         }
     },
     type: 'object'

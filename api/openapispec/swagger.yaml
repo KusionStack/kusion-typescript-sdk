@@ -30,17 +30,17 @@ definitions:
   constant.SourceProviderType:
     enum:
     - git
+    - git
     - github
     - oci
     - local
-    - git
     type: string
     x-enum-varnames:
+    - DefaultSourceType
     - SourceProviderTypeGit
     - SourceProviderTypeGithub
     - SourceProviderTypeOCI
     - SourceProviderTypeLocal
-    - DefaultSourceType
   constant.StackState:
     enum:
     - UnSynced
@@ -123,6 +123,31 @@ definitions:
         allOf:
         - $ref: '#/definitions/url.URL'
         description: URL is the module oci artifact registry URL.
+    type: object
+  entity.ModuleWithVersion:
+    properties:
+      description:
+        description: Description is a human-readable description of the module.
+        type: string
+      doc:
+        allOf:
+        - $ref: '#/definitions/url.URL'
+        description: Doc is the documentation URL of the module.
+      name:
+        description: Name is the module name.
+        type: string
+      owners:
+        description: Owners is a list of owners for the module.
+        items:
+          type: string
+        type: array
+      url:
+        allOf:
+        - $ref: '#/definitions/url.URL'
+        description: URL is the module oci artifact registry URL.
+      version:
+        description: Version is the module oci artifact version.
+        type: string
     type: object
   entity.Organization:
     properties:
@@ -480,6 +505,50 @@ definitions:
         type: array
       updateTimestamp:
         description: UpdateTimestamp is the timestamp of the updated for the workspace.
+        type: string
+    type: object
+  handler.Duration:
+    enum:
+    - -9223372036854775808
+    - 9223372036854775807
+    - 1
+    - 1000
+    - 1000000
+    - 1000000000
+    - 60000000000
+    - 3600000000000
+    type: integer
+    x-enum-varnames:
+    - minDuration
+    - maxDuration
+    - Nanosecond
+    - Microsecond
+    - Millisecond
+    - Second
+    - Minute
+    - Hour
+  handler.Response:
+    properties:
+      costTime:
+        allOf:
+        - $ref: '#/definitions/handler.Duration'
+        description: Time taken for the request.
+      data:
+        description: Data payload.
+      endTime:
+        description: Request end time.
+        type: string
+      message:
+        description: Descriptive message.
+        type: string
+      startTime:
+        description: Request start time.
+        type: string
+      success:
+        description: Indicates success status.
+        type: boolean
+      traceID:
+        description: Trace identifier.
         type: string
     type: object
   kusionstack_io_kusion_pkg_apis_api_kusion_io_v1.AWSProvider:
@@ -1198,6 +1267,127 @@ definitions:
         description: SecretStore represents a secure external location for storing
           secrets.
     type: object
+  response.PaginatedBackendResponse:
+    properties:
+      backends:
+        items:
+          $ref: '#/definitions/entity.Backend'
+        type: array
+      currentPage:
+        type: integer
+      pageSize:
+        type: integer
+      total:
+        type: integer
+    type: object
+  response.PaginatedModuleResponse:
+    properties:
+      currentPage:
+        type: integer
+      modules:
+        items:
+          $ref: '#/definitions/entity.Module'
+        type: array
+      modulesWithVersion:
+        items:
+          $ref: '#/definitions/entity.ModuleWithVersion'
+        type: array
+      pageSize:
+        type: integer
+      total:
+        type: integer
+    type: object
+  response.PaginatedOrganizationResponse:
+    properties:
+      currentPage:
+        type: integer
+      organizations:
+        items:
+          $ref: '#/definitions/entity.Organization'
+        type: array
+      pageSize:
+        type: integer
+      total:
+        type: integer
+    type: object
+  response.PaginatedProjectResponse:
+    properties:
+      currentPage:
+        type: integer
+      pageSize:
+        type: integer
+      projects:
+        items:
+          $ref: '#/definitions/entity.Project'
+        type: array
+      total:
+        type: integer
+    type: object
+  response.PaginatedResourceResponse:
+    properties:
+      currentPage:
+        type: integer
+      pageSize:
+        type: integer
+      resources:
+        items:
+          $ref: '#/definitions/entity.Resource'
+        type: array
+      total:
+        type: integer
+    type: object
+  response.PaginatedRunResponse:
+    properties:
+      currentPage:
+        type: integer
+      pageSize:
+        type: integer
+      runs:
+        items:
+          $ref: '#/definitions/entity.Run'
+        type: array
+      total:
+        type: integer
+    type: object
+  response.PaginatedSourceResponse:
+    properties:
+      currentPage:
+        type: integer
+      pageSize:
+        type: integer
+      sources:
+        items:
+          $ref: '#/definitions/entity.Source'
+        type: array
+      total:
+        type: integer
+    type: object
+  response.PaginatedStackResponse:
+    properties:
+      currentPage:
+        type: integer
+      pageSize:
+        type: integer
+      stacks:
+        items:
+          $ref: '#/definitions/entity.Stack'
+        type: array
+      total:
+        type: integer
+    type: object
+  response.PaginatedWorkspaceResponse:
+    properties:
+      currentPage:
+        type: integer
+      pageSize:
+        type: integer
+      total:
+        type: integer
+      workspaces:
+        items:
+          $ref: '#/definitions/entity.Workspace'
+        type: array
+    type: object
   url.URL:
     properties:
       forceQuery:
@@ -1243,13 +1433,27 @@ paths:
     get:
       description: List all backends
       operationId: listBackend
+      parameters:
+      - description: The current page to fetch. Default to 1
+        in: query
+        name: page
+        type: integer
+      - description: The size of the page. Default to 10
+        in: query
+        name: pageSize
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/entity.Backend'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.PaginatedBackendResponse'
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -1286,7 +1490,12 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/entity.Backend'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Backend'
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -1321,7 +1530,12 @@ paths:
         "200":
           description: Success
           schema:
-            type: string
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -1355,7 +1569,12 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/entity.Backend'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Backend'
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -1397,7 +1616,12 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/entity.Backend'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Backend'
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -1429,15 +1653,26 @@ paths:
         in: query
         name: moduleName
         type: string
+      - description: The current page to fetch. Default to 1
+        in: query
+        name: page
+        type: integer
+      - description: The size of the page. Default to 10
+        in: query
+        name: pageSize
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: Success
           schema:
-            items:
-              $ref: '#/definitions/entity.Module'
-            type: array
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.PaginatedModuleResponse'
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -1474,7 +1709,12 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/entity.Module'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Module'
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -1509,7 +1749,12 @@ paths:
         "200":
           description: Success
           schema:
-            type: string
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -1543,7 +1788,12 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/entity.Module'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Module'
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -1585,7 +1835,12 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/entity.Module'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Module'
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -1608,15 +1863,27 @@ paths:
     get:
       description: List all organizations
       operationId: listOrganization
+      parameters:
+      - description: The current page to fetch. Default to 1
+        in: query
+        name: page
+        type: integer
+      - description: The size of the page. Default to 10
+        in: query
+        name: pageSize
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: Success
           schema:
-            items:
-              $ref: '#/definitions/entity.Organization'
-            type: array
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.PaginatedOrganizationResponse'
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -1653,7 +1920,12 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/entity.Organization'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Organization'
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -1688,7 +1960,12 @@ paths:
         "200":
           description: Success
           schema:
-            type: string
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -1722,7 +1999,12 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/entity.Organization'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Organization'
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -1764,7 +2046,12 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/entity.Organization'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Organization'
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -1797,15 +2084,28 @@ paths:
         in: query
         name: name
         type: string
+      - description: The current page to fetch. Default to 1
+        in: query
+        name: page
+        type: integer
+      - description: The size of the page. Default to 10
+        in: query
+        name: pageSize
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: Success
           schema:
-            items:
-              $ref: '#/definitions/entity.Project'
-            type: array
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/response.PaginatedProjectResponse'
+                  type: array
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -1842,7 +2142,12 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/entity.Project'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Project'
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -1877,7 +2182,12 @@ paths:
         "200":
           description: Success
           schema:
-            type: string
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -1911,7 +2221,12 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/entity.Project'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Project'
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -1953,7 +2268,12 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/entity.Project'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Project'
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -1976,13 +2296,29 @@ paths:
     get:
       description: List resource information
       operationId: listResource
+      parameters:
+      - description: The current page to fetch. Default to 1
+        in: query
+        name: page
+        type: integer
+      - description: The size of the page. Default to 10
+        in: query
+        name: pageSize
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/entity.Resource'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/response.PaginatedResourceResponse'
+                  type: array
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -2017,7 +2353,12 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/entity.Resource'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Resource'
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -2052,7 +2393,12 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/entity.ResourceGraph'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.ResourceGraph'
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -2110,6 +2456,14 @@ paths:
           type: string
         name: status
         type: array
+      - description: StackID to filter runs by. Default to all
+        in: query
+        name: stackID
+        type: integer
+      - description: Workspace to filter runs by. Default to all
+        in: query
+        name: workspace
+        type: string
       - description: 'StartTime to filter runs by. Default to all. Format: RFC3339'
         in: query
         name: startTime
@@ -2118,15 +2472,26 @@ paths:
         in: query
         name: endTime
         type: string
+      - description: The current page to fetch. Default to 1
+        in: query
+        name: page
+        type: integer
+      - description: The size of the page. Default to 10
+        in: query
+        name: pageSize
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: Success
           schema:
-            items:
-              $ref: '#/definitions/entity.Stack'
-            type: array
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.PaginatedRunResponse'
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -2161,7 +2526,12 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/entity.Run'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Run'
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -2196,7 +2566,12 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/entity.Run'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -2224,13 +2599,26 @@ paths:
         in: query
         name: sourceName
         type: string
+      - description: The current page to fetch. Default to 1
+        in: query
+        name: page
+        type: integer
+      - description: The size of the page. Default to 10
+        in: query
+        name: pageSize
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/entity.Source'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.PaginatedSourceResponse'
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -2267,7 +2655,12 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/entity.Source'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Source'
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -2302,7 +2695,12 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/entity.Source'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -2336,7 +2734,12 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/entity.Source'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Source'
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -2378,7 +2781,12 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/entity.Source'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Source'
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -2422,15 +2830,26 @@ paths:
         in: query
         name: env
         type: string
+      - description: The current page to fetch. Default to 1
+        in: query
+        name: page
+        type: integer
+      - description: The size of the page. Default to 10
+        in: query
+        name: pageSize
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: Success
           schema:
-            items:
-              $ref: '#/definitions/entity.Stack'
-            type: array
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.PaginatedStackResponse'
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -2477,7 +2896,12 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/entity.Stack'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Stack'
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -2512,7 +2936,12 @@ paths:
         "200":
           description: Success
           schema:
-            type: string
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -2546,7 +2975,12 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/entity.Stack'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Stack'
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -2588,7 +3022,12 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/entity.Stack'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Stack'
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -2651,7 +3090,12 @@ paths:
         "200":
           description: Success
           schema:
-            type: string
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -2714,7 +3158,12 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/entity.Run'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Run'
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -2763,7 +3212,12 @@ paths:
         "200":
           description: Success
           schema:
-            type: string
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -2813,7 +3267,12 @@ paths:
         "200":
           description: Success
           schema:
-            type: string
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Run'
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -2862,7 +3321,12 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/kusionstack_io_kusion_pkg_apis_api_kusion_io_v1.Spec'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/kusionstack_io_kusion_pkg_apis_api_kusion_io_v1.Spec'
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -2911,7 +3375,12 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/kusionstack_io_kusion_pkg_apis_api_kusion_io_v1.Spec'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Run'
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -2977,7 +3446,12 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/entity.Run'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Run'
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -3000,13 +3474,27 @@ paths:
     get:
       description: List all workspaces
       operationId: listWorkspace
+      parameters:
+      - description: The current page to fetch. Default to 1
+        in: query
+        name: page
+        type: integer
+      - description: The size of the page. Default to 10
+        in: query
+        name: pageSize
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/entity.Workspace'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.PaginatedWorkspaceResponse'
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -3043,7 +3531,12 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/entity.Workspace'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Workspace'
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -3078,7 +3571,12 @@ paths:
         "200":
           description: Success
           schema:
-            type: string
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -3112,7 +3610,12 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/entity.Workspace'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Workspace'
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -3154,7 +3657,12 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/entity.Workspace'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Workspace'
+              type: object
         "400":
           description: Bad Request
           schema: {}

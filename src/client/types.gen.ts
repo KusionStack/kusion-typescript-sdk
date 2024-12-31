@@ -17,10 +17,10 @@ export enum constant_RunType {
 }
 
 export enum constant_SourceProviderType {
-    DefaultSourceType = 'git',
-    SourceProviderTypeGit = 'github',
-    SourceProviderTypeGithub = 'oci',
-    SourceProviderTypeOCI = 'local'
+    SourceProviderTypeGit = 'git',
+    SourceProviderTypeGithub = 'github',
+    SourceProviderTypeOCI = 'oci',
+    SourceProviderTypeLocal = 'local'
 }
 
 export enum constant_StackState {
@@ -1385,7 +1385,7 @@ export type DeleteBackendData = {
         /**
          * Backend ID
          */
-        id: number;
+        backendID: number;
     };
 };
 
@@ -1400,7 +1400,7 @@ export type GetBackendData = {
         /**
          * Backend ID
          */
-        id: number;
+        backendID: number;
     };
 };
 
@@ -1419,7 +1419,7 @@ export type UpdateBackendData = {
         /**
          * Backend ID
          */
-        id: number;
+        backendID: number;
     };
 };
 
@@ -1478,7 +1478,7 @@ export type DeleteModuleData = {
         /**
          * Module Name
          */
-        name: string;
+        moduleName: string;
     };
 };
 
@@ -1493,7 +1493,7 @@ export type GetModuleData = {
         /**
          * Module Name
          */
-        name: string;
+        moduleName: string;
     };
 };
 
@@ -1512,7 +1512,7 @@ export type UpdateModuleData = {
         /**
          * Module Name
          */
-        name: string;
+        moduleName: string;
     };
 };
 
@@ -1559,7 +1559,7 @@ export type DeleteOrganizationData = {
         /**
          * Organization ID
          */
-        id: number;
+        orgID: number;
     };
 };
 
@@ -1574,7 +1574,7 @@ export type GetOrganizationData = {
         /**
          * Organization ID
          */
-        id: number;
+        orgID: number;
     };
 };
 
@@ -1593,7 +1593,7 @@ export type UpdateOrganizationData = {
         /**
          * Organization ID
          */
-        id: number;
+        orgID: number;
     };
 };
 
@@ -1648,7 +1648,7 @@ export type DeleteProjectData = {
         /**
          * Project ID
          */
-        project_id: number;
+        projectID: number;
     };
 };
 
@@ -1663,7 +1663,7 @@ export type GetProjectData = {
         /**
          * Project ID
          */
-        project_id: number;
+        projectID: number;
     };
 };
 
@@ -1682,7 +1682,7 @@ export type UpdateProjectData = {
         /**
          * Project ID
          */
-        project_id: number;
+        projectID: number;
     };
 };
 
@@ -1695,6 +1695,10 @@ export type UpdateProjectError = (unknown);
 export type ListResourceData = {
     query?: {
         /**
+         * The organization ID
+         */
+        orgID?: number;
+        /**
          * The current page to fetch. Default to 1
          */
         page?: number;
@@ -1702,6 +1706,22 @@ export type ListResourceData = {
          * The size of the page. Default to 10
          */
         pageSize?: number;
+        /**
+         * The project ID
+         */
+        projectID?: number;
+        /**
+         * The resource plane
+         */
+        resourcePlane?: string;
+        /**
+         * The resource type
+         */
+        resourceType?: string;
+        /**
+         * The stack ID
+         */
+        stackID?: number;
     };
 };
 
@@ -1716,7 +1736,7 @@ export type GetResourceData = {
         /**
          * Resource ID
          */
-        id: number;
+        resourceID: number;
     };
 };
 
@@ -1731,7 +1751,7 @@ export type GetResourceGraphData = {
         /**
          * Stack ID
          */
-        stack_id: number;
+        stackID: number;
     };
 };
 
@@ -1746,7 +1766,7 @@ export type GetRunData = {
         /**
          * Run ID
          */
-        run: number;
+        runID: number;
     };
 };
 
@@ -1761,7 +1781,7 @@ export type GetRunResultData = {
         /**
          * Run ID
          */
-        run: number;
+        runID: number;
     };
 };
 
@@ -1812,7 +1832,7 @@ export type DeleteSourceData = {
         /**
          * Source ID
          */
-        id: number;
+        sourceID: number;
     };
 };
 
@@ -1827,7 +1847,7 @@ export type GetSourceData = {
         /**
          * Source ID
          */
-        id: number;
+        sourceID: number;
     };
 };
 
@@ -1846,7 +1866,7 @@ export type UpdateSourceData = {
         /**
          * Source ID
          */
-        id: number;
+        sourceID: number;
     };
 };
 
@@ -1859,21 +1879,9 @@ export type UpdateSourceError = (unknown);
 export type ListRunData = {
     query?: {
         /**
-         * Cloud to filter runs by. Default to all
-         */
-        cloud?: string;
-        /**
          * EndTime to filter runs by. Default to all. Format: RFC3339
          */
         endTime?: string;
-        /**
-         * Environment to filter runs by. Default to all
-         */
-        env?: string;
-        /**
-         * OrgID to filter runs by. Default to all
-         */
-        orgID?: number;
         /**
          * The current page to fetch. Default to 1
          */
@@ -1886,10 +1894,6 @@ export type ListRunData = {
          * ProjectID to filter runs by. Default to all
          */
         projectID?: number;
-        /**
-         * ProjectName to filter runs by. Default to all
-         */
-        projectName?: string;
         /**
          * StackID to filter runs by. Default to all
          */
@@ -1922,14 +1926,6 @@ export type ListRunError = (unknown);
 export type ListStackData = {
     query?: {
         /**
-         * Cloud to filter stacks by. Default to all
-         */
-        cloud?: string;
-        /**
-         * Environment to filter stacks by. Default to all
-         */
-        env?: string;
-        /**
          * OrgID to filter stacks by. Default to all
          */
         orgID?: number;
@@ -1941,6 +1937,10 @@ export type ListStackData = {
          * The size of the page. Default to 10
          */
         pageSize?: number;
+        /**
+         * Path to filter stacks by. Default to all
+         */
+        path?: string;
         /**
          * ProjectID to filter stacks by. Default to all
          */
@@ -1986,7 +1986,7 @@ export type DeleteStackData = {
         /**
          * Stack ID
          */
-        stack_id: number;
+        stackID: number;
     };
 };
 
@@ -2001,7 +2001,7 @@ export type GetStackData = {
         /**
          * Stack ID
          */
-        stack_id: number;
+        stackID: number;
     };
 };
 
@@ -2020,7 +2020,7 @@ export type UpdateStackData = {
         /**
          * Stack ID
          */
-        stack_id: number;
+        stackID: number;
     };
 };
 
@@ -2039,7 +2039,7 @@ export type ApplyStackData = {
         /**
          * Stack ID
          */
-        stack_id: number;
+        stackID: number;
     };
     query: {
         /**
@@ -2080,7 +2080,7 @@ export type ApplyStackAsyncData = {
         /**
          * Stack ID
          */
-        stack_id: number;
+        stackID: number;
     };
     query: {
         /**
@@ -2117,7 +2117,7 @@ export type DestroyStackData = {
         /**
          * Stack ID
          */
-        stack_id: number;
+        stackID: number;
     };
     query: {
         /**
@@ -2146,7 +2146,7 @@ export type DestroyStackAsyncData = {
         /**
          * Stack ID
          */
-        stack_id: number;
+        stackID: number;
     };
     query: {
         /**
@@ -2175,7 +2175,7 @@ export type GenerateStackData = {
         /**
          * Stack ID
          */
-        stack_id: number;
+        stackID: number;
     };
     query: {
         /**
@@ -2204,7 +2204,7 @@ export type GenerateStackAsyncData = {
         /**
          * Stack ID
          */
-        stack_id: number;
+        stackID: number;
     };
     query: {
         /**
@@ -2237,7 +2237,7 @@ export type PreviewStackAsyncData = {
         /**
          * Stack ID
          */
-        stack_id: number;
+        stackID: number;
     };
     query: {
         /**
@@ -2276,6 +2276,10 @@ export type PreviewStackAsyncError = (unknown);
 export type ListWorkspaceData = {
     query?: {
         /**
+         * BackendID to filter workspaces by. Default to all
+         */
+        backendID?: number;
+        /**
          * The current page to fetch. Default to 1
          */
         page?: number;
@@ -2310,7 +2314,7 @@ export type DeleteWorkspaceData = {
         /**
          * Workspace ID
          */
-        id: number;
+        workspaceID: number;
     };
 };
 
@@ -2325,7 +2329,7 @@ export type GetWorkspaceData = {
         /**
          * Workspace ID
          */
-        id: number;
+        workspaceID: number;
     };
 };
 
@@ -2344,7 +2348,7 @@ export type UpdateWorkspaceData = {
         /**
          * Workspace ID
          */
-        id: number;
+        workspaceID: number;
     };
 };
 
@@ -2359,7 +2363,7 @@ export type GetWorkspaceConfigsData = {
         /**
          * Workspace ID
          */
-        id: number;
+        workspaceID: number;
     };
 };
 
@@ -2376,7 +2380,7 @@ export type UpdateWorkspaceConfigsData = {
         /**
          * Workspace ID
          */
-        id: number;
+        workspaceID: number;
     };
 };
 
@@ -2389,7 +2393,7 @@ export type CreateWorkspaceModDepsData = {
         /**
          * Workspace ID
          */
-        id: number;
+        workspaceID: number;
     };
 };
 

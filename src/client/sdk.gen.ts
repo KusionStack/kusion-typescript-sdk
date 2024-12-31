@@ -35,7 +35,7 @@ export class BackendService {
     public static deleteBackend<ThrowOnError extends boolean = false>(options: OptionsLegacyParser<DeleteBackendData, ThrowOnError>) {
         return (options?.client ?? client).delete<DeleteBackendResponse, DeleteBackendError, ThrowOnError>({
             ...options,
-            url: '/api/v1/backends/{id}'
+            url: '/api/v1/backends/{backendID}'
         });
     }
     
@@ -46,7 +46,7 @@ export class BackendService {
     public static getBackend<ThrowOnError extends boolean = false>(options: OptionsLegacyParser<GetBackendData, ThrowOnError>) {
         return (options?.client ?? client).get<GetBackendResponse, GetBackendError, ThrowOnError>({
             ...options,
-            url: '/api/v1/backends/{id}'
+            url: '/api/v1/backends/{backendID}'
         });
     }
     
@@ -57,7 +57,7 @@ export class BackendService {
     public static updateBackend<ThrowOnError extends boolean = false>(options: OptionsLegacyParser<UpdateBackendData, ThrowOnError>) {
         return (options?.client ?? client).put<UpdateBackendResponse, UpdateBackendError, ThrowOnError>({
             ...options,
-            url: '/api/v1/backends/{id}'
+            url: '/api/v1/backends/{backendID}'
         });
     }
     
@@ -107,7 +107,7 @@ export class ModuleService {
     public static deleteModule<ThrowOnError extends boolean = false>(options: OptionsLegacyParser<DeleteModuleData, ThrowOnError>) {
         return (options?.client ?? client).delete<DeleteModuleResponse, DeleteModuleError, ThrowOnError>({
             ...options,
-            url: '/api/v1/modules/{name}'
+            url: '/api/v1/modules/{moduleName}'
         });
     }
     
@@ -118,7 +118,7 @@ export class ModuleService {
     public static getModule<ThrowOnError extends boolean = false>(options: OptionsLegacyParser<GetModuleData, ThrowOnError>) {
         return (options?.client ?? client).get<GetModuleResponse, GetModuleError, ThrowOnError>({
             ...options,
-            url: '/api/v1/modules/{name}'
+            url: '/api/v1/modules/{moduleName}'
         });
     }
     
@@ -129,7 +129,7 @@ export class ModuleService {
     public static updateModule<ThrowOnError extends boolean = false>(options: OptionsLegacyParser<UpdateModuleData, ThrowOnError>) {
         return (options?.client ?? client).put<UpdateModuleResponse, UpdateModuleError, ThrowOnError>({
             ...options,
-            url: '/api/v1/modules/{name}'
+            url: '/api/v1/modules/{moduleName}'
         });
     }
     
@@ -165,7 +165,7 @@ export class OrganizationService {
     public static deleteOrganization<ThrowOnError extends boolean = false>(options: OptionsLegacyParser<DeleteOrganizationData, ThrowOnError>) {
         return (options?.client ?? client).delete<DeleteOrganizationResponse, DeleteOrganizationError, ThrowOnError>({
             ...options,
-            url: '/api/v1/orgs/{id}'
+            url: '/api/v1/orgs/{orgID}'
         });
     }
     
@@ -176,7 +176,7 @@ export class OrganizationService {
     public static getOrganization<ThrowOnError extends boolean = false>(options: OptionsLegacyParser<GetOrganizationData, ThrowOnError>) {
         return (options?.client ?? client).get<GetOrganizationResponse, GetOrganizationError, ThrowOnError>({
             ...options,
-            url: '/api/v1/orgs/{id}'
+            url: '/api/v1/orgs/{orgID}'
         });
     }
     
@@ -187,7 +187,7 @@ export class OrganizationService {
     public static updateOrganization<ThrowOnError extends boolean = false>(options: OptionsLegacyParser<UpdateOrganizationData, ThrowOnError>) {
         return (options?.client ?? client).put<UpdateOrganizationResponse, UpdateOrganizationError, ThrowOnError>({
             ...options,
-            url: '/api/v1/orgs/{id}'
+            url: '/api/v1/orgs/{orgID}'
         });
     }
     
@@ -223,7 +223,7 @@ export class ProjectService {
     public static deleteProject<ThrowOnError extends boolean = false>(options: OptionsLegacyParser<DeleteProjectData, ThrowOnError>) {
         return (options?.client ?? client).delete<DeleteProjectResponse, DeleteProjectError, ThrowOnError>({
             ...options,
-            url: '/api/v1/projects/{project_id}'
+            url: '/api/v1/projects/{projectID}'
         });
     }
     
@@ -234,7 +234,7 @@ export class ProjectService {
     public static getProject<ThrowOnError extends boolean = false>(options: OptionsLegacyParser<GetProjectData, ThrowOnError>) {
         return (options?.client ?? client).get<GetProjectResponse, GetProjectError, ThrowOnError>({
             ...options,
-            url: '/api/v1/projects/{project_id}'
+            url: '/api/v1/projects/{projectID}'
         });
     }
     
@@ -245,7 +245,7 @@ export class ProjectService {
     public static updateProject<ThrowOnError extends boolean = false>(options: OptionsLegacyParser<UpdateProjectData, ThrowOnError>) {
         return (options?.client ?? client).put<UpdateProjectResponse, UpdateProjectError, ThrowOnError>({
             ...options,
-            url: '/api/v1/projects/{project_id}'
+            url: '/api/v1/projects/{projectID}'
         });
     }
     
@@ -270,7 +270,7 @@ export class ResourceService {
     public static getResource<ThrowOnError extends boolean = false>(options: OptionsLegacyParser<GetResourceData, ThrowOnError>) {
         return (options?.client ?? client).get<GetResourceResponse, GetResourceError, ThrowOnError>({
             ...options,
-            url: '/api/v1/resources/{id}'
+            url: '/api/v1/resources/{resourceID}'
         });
     }
     
@@ -295,7 +295,7 @@ export class RunService {
     public static getRun<ThrowOnError extends boolean = false>(options: OptionsLegacyParser<GetRunData, ThrowOnError>) {
         return (options?.client ?? client).get<GetRunResponse, GetRunError, ThrowOnError>({
             ...options,
-            url: '/api/v1/runs/{run_id}'
+            url: '/api/v1/runs/{runID}'
         });
     }
     
@@ -306,7 +306,7 @@ export class RunService {
     public static getRunResult<ThrowOnError extends boolean = false>(options: OptionsLegacyParser<GetRunResultData, ThrowOnError>) {
         return (options?.client ?? client).get<GetRunResultResponse, GetRunResultError, ThrowOnError>({
             ...options,
-            url: '/api/v1/runs/{run_id}/result'
+            url: '/api/v1/runs/{runID}/result'
         });
     }
     
@@ -342,7 +342,7 @@ export class SourceService {
     public static deleteSource<ThrowOnError extends boolean = false>(options: OptionsLegacyParser<DeleteSourceData, ThrowOnError>) {
         return (options?.client ?? client).delete<DeleteSourceResponse, DeleteSourceError, ThrowOnError>({
             ...options,
-            url: '/api/v1/sources/{id}'
+            url: '/api/v1/sources/{sourceID}'
         });
     }
     
@@ -353,7 +353,7 @@ export class SourceService {
     public static getSource<ThrowOnError extends boolean = false>(options: OptionsLegacyParser<GetSourceData, ThrowOnError>) {
         return (options?.client ?? client).get<GetSourceResponse, GetSourceError, ThrowOnError>({
             ...options,
-            url: '/api/v1/sources/{id}'
+            url: '/api/v1/sources/{sourceID}'
         });
     }
     
@@ -364,7 +364,7 @@ export class SourceService {
     public static updateSource<ThrowOnError extends boolean = false>(options: OptionsLegacyParser<UpdateSourceData, ThrowOnError>) {
         return (options?.client ?? client).put<UpdateSourceResponse, UpdateSourceError, ThrowOnError>({
             ...options,
-            url: '/api/v1/sources/{id}'
+            url: '/api/v1/sources/{sourceID}'
         });
     }
     
@@ -411,7 +411,7 @@ export class StackService {
     public static deleteStack<ThrowOnError extends boolean = false>(options: OptionsLegacyParser<DeleteStackData, ThrowOnError>) {
         return (options?.client ?? client).delete<DeleteStackResponse, DeleteStackError, ThrowOnError>({
             ...options,
-            url: '/api/v1/stacks/{stack_id}'
+            url: '/api/v1/stacks/{stackID}'
         });
     }
     
@@ -422,7 +422,7 @@ export class StackService {
     public static getStack<ThrowOnError extends boolean = false>(options: OptionsLegacyParser<GetStackData, ThrowOnError>) {
         return (options?.client ?? client).get<GetStackResponse, GetStackError, ThrowOnError>({
             ...options,
-            url: '/api/v1/stacks/{stack_id}'
+            url: '/api/v1/stacks/{stackID}'
         });
     }
     
@@ -433,7 +433,7 @@ export class StackService {
     public static updateStack<ThrowOnError extends boolean = false>(options: OptionsLegacyParser<UpdateStackData, ThrowOnError>) {
         return (options?.client ?? client).put<UpdateStackResponse, UpdateStackError, ThrowOnError>({
             ...options,
-            url: '/api/v1/stacks/{stack_id}'
+            url: '/api/v1/stacks/{stackID}'
         });
     }
     
@@ -444,7 +444,7 @@ export class StackService {
     public static applyStack<ThrowOnError extends boolean = false>(options: OptionsLegacyParser<ApplyStackData, ThrowOnError>) {
         return (options?.client ?? client).post<ApplyStackResponse, ApplyStackError, ThrowOnError>({
             ...options,
-            url: '/api/v1/stacks/{stack_id}/apply'
+            url: '/api/v1/stacks/{stackID}/apply'
         });
     }
     
@@ -455,7 +455,7 @@ export class StackService {
     public static applyStackAsync<ThrowOnError extends boolean = false>(options: OptionsLegacyParser<ApplyStackAsyncData, ThrowOnError>) {
         return (options?.client ?? client).post<ApplyStackAsyncResponse, ApplyStackAsyncError, ThrowOnError>({
             ...options,
-            url: '/api/v1/stacks/{stack_id}/apply/async'
+            url: '/api/v1/stacks/{stackID}/apply/async'
         });
     }
     
@@ -466,7 +466,7 @@ export class StackService {
     public static destroyStack<ThrowOnError extends boolean = false>(options: OptionsLegacyParser<DestroyStackData, ThrowOnError>) {
         return (options?.client ?? client).post<DestroyStackResponse, DestroyStackError, ThrowOnError>({
             ...options,
-            url: '/api/v1/stacks/{stack_id}/destroy'
+            url: '/api/v1/stacks/{stackID}/destroy'
         });
     }
     
@@ -477,7 +477,7 @@ export class StackService {
     public static destroyStackAsync<ThrowOnError extends boolean = false>(options: OptionsLegacyParser<DestroyStackAsyncData, ThrowOnError>) {
         return (options?.client ?? client).post<DestroyStackAsyncResponse, DestroyStackAsyncError, ThrowOnError>({
             ...options,
-            url: '/api/v1/stacks/{stack_id}/destroy/async'
+            url: '/api/v1/stacks/{stackID}/destroy/async'
         });
     }
     
@@ -488,7 +488,7 @@ export class StackService {
     public static generateStack<ThrowOnError extends boolean = false>(options: OptionsLegacyParser<GenerateStackData, ThrowOnError>) {
         return (options?.client ?? client).post<GenerateStackResponse, GenerateStackError, ThrowOnError>({
             ...options,
-            url: '/api/v1/stacks/{stack_id}/generate'
+            url: '/api/v1/stacks/{stackID}/generate'
         });
     }
     
@@ -499,7 +499,7 @@ export class StackService {
     public static generateStackAsync<ThrowOnError extends boolean = false>(options: OptionsLegacyParser<GenerateStackAsyncData, ThrowOnError>) {
         return (options?.client ?? client).post<GenerateStackAsyncResponse, GenerateStackAsyncError, ThrowOnError>({
             ...options,
-            url: '/api/v1/stacks/{stack_id}/generate/async'
+            url: '/api/v1/stacks/{stackID}/generate/async'
         });
     }
     
@@ -510,7 +510,7 @@ export class StackService {
     public static previewStackAsync<ThrowOnError extends boolean = false>(options: OptionsLegacyParser<PreviewStackAsyncData, ThrowOnError>) {
         return (options?.client ?? client).post<PreviewStackAsyncResponse, PreviewStackAsyncError, ThrowOnError>({
             ...options,
-            url: '/api/v1/stacks/{stack_id}/preview'
+            url: '/api/v1/stacks/{stackID}/preview'
         });
     }
     
@@ -546,7 +546,7 @@ export class WorkspaceService {
     public static deleteWorkspace<ThrowOnError extends boolean = false>(options: OptionsLegacyParser<DeleteWorkspaceData, ThrowOnError>) {
         return (options?.client ?? client).delete<DeleteWorkspaceResponse, DeleteWorkspaceError, ThrowOnError>({
             ...options,
-            url: '/api/v1/workspaces/{id}'
+            url: '/api/v1/workspaces/{workspaceID}'
         });
     }
     
@@ -557,7 +557,7 @@ export class WorkspaceService {
     public static getWorkspace<ThrowOnError extends boolean = false>(options: OptionsLegacyParser<GetWorkspaceData, ThrowOnError>) {
         return (options?.client ?? client).get<GetWorkspaceResponse, GetWorkspaceError, ThrowOnError>({
             ...options,
-            url: '/api/v1/workspaces/{id}'
+            url: '/api/v1/workspaces/{workspaceID}'
         });
     }
     
@@ -568,7 +568,7 @@ export class WorkspaceService {
     public static updateWorkspace<ThrowOnError extends boolean = false>(options: OptionsLegacyParser<UpdateWorkspaceData, ThrowOnError>) {
         return (options?.client ?? client).put<UpdateWorkspaceResponse, UpdateWorkspaceError, ThrowOnError>({
             ...options,
-            url: '/api/v1/workspaces/{id}'
+            url: '/api/v1/workspaces/{workspaceID}'
         });
     }
     
@@ -579,7 +579,7 @@ export class WorkspaceService {
     public static getWorkspaceConfigs<ThrowOnError extends boolean = false>(options: OptionsLegacyParser<GetWorkspaceConfigsData, ThrowOnError>) {
         return (options?.client ?? client).get<GetWorkspaceConfigsResponse, GetWorkspaceConfigsError, ThrowOnError>({
             ...options,
-            url: '/api/v1/workspaces/{id}/configs'
+            url: '/api/v1/workspaces/{workspaceID}/configs'
         });
     }
     
@@ -590,7 +590,7 @@ export class WorkspaceService {
     public static updateWorkspaceConfigs<ThrowOnError extends boolean = false>(options: OptionsLegacyParser<UpdateWorkspaceConfigsData, ThrowOnError>) {
         return (options?.client ?? client).put<UpdateWorkspaceConfigsResponse, UpdateWorkspaceConfigsError, ThrowOnError>({
             ...options,
-            url: '/api/v1/workspaces/{id}/configs'
+            url: '/api/v1/workspaces/{workspaceID}/configs'
         });
     }
     
@@ -601,7 +601,7 @@ export class WorkspaceService {
     public static createWorkspaceModDeps<ThrowOnError extends boolean = false>(options: OptionsLegacyParser<CreateWorkspaceModDepsData, ThrowOnError>) {
         return (options?.client ?? client).post<CreateWorkspaceModDepsResponse, CreateWorkspaceModDepsError, ThrowOnError>({
             ...options,
-            url: '/api/v1/workspaces/{id}/configs/mod-deps'
+            url: '/api/v1/workspaces/{workspaceID}/configs/mod-deps'
         });
     }
     

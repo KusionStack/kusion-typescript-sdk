@@ -17,10 +17,10 @@ export enum constant_RunType {
 }
 
 export enum constant_SourceProviderType {
-    SourceProviderTypeGit = 'git',
-    SourceProviderTypeGithub = 'github',
-    SourceProviderTypeOCI = 'oci',
-    SourceProviderTypeLocal = 'local'
+    DefaultSourceType = 'git',
+    SourceProviderTypeGit = 'github',
+    SourceProviderTypeGithub = 'oci',
+    SourceProviderTypeOCI = 'local'
 }
 
 export enum constant_StackState {
@@ -833,7 +833,7 @@ export type request_CreateBackendRequest = {
     /**
      * BackendConfig is the configuration of the backend.
      */
-    backendConfig?: (kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_BackendConfig);
+    backendConfig: (kusionstack_io_kusion_pkg_apis_api_kusion_io_v1_BackendConfig);
     /**
      * Description is a human-readable description of the backend.
      */
@@ -879,7 +879,7 @@ export type request_CreateOrganizationRequest = {
     /**
      * Name is the name of the organization.
      */
-    name?: string;
+    name: string;
     /**
      * Owners is a list of owners for the organization.
      */
@@ -894,7 +894,7 @@ export type request_CreateProjectRequest = {
     /**
      * Domain is the domain of the project, typically serving as the parent folder name for the project.
      */
-    domain: string;
+    domain?: string;
     /**
      * Labels are custom labels associated with the project.
      */
@@ -902,7 +902,7 @@ export type request_CreateProjectRequest = {
     /**
      * Name is the name of the project.
      */
-    name?: string;
+    name: string;
     /**
      * OrganizationID is the organization id associated with the project.
      */
@@ -914,7 +914,7 @@ export type request_CreateProjectRequest = {
     /**
      * Path is the relative path of the project within the sources.
      */
-    path?: string;
+    path: string;
     /**
      * SourceID is the configuration source id associated with the project.
      */
@@ -1032,7 +1032,7 @@ export type request_UpdateBackendRequest = {
     /**
      * Name is the name of the backend.
      */
-    name: string;
+    name?: string;
 };
 
 export type request_UpdateModuleRequest = {
@@ -1078,7 +1078,7 @@ export type request_UpdateOrganizationRequest = {
     /**
      * Owners is a list of owners for the organization.
      */
-    owners: Array<(string)>;
+    owners?: Array<(string)>;
 };
 
 export type request_UpdateProjectRequest = {
@@ -1089,7 +1089,7 @@ export type request_UpdateProjectRequest = {
     /**
      * Domain is the domain of the project, typically serving as the parent folder name for the project.
      */
-    domain: string;
+    domain?: string;
     /**
      * ID is the id of the project.
      */
@@ -1136,7 +1136,7 @@ export type request_UpdateSourceRequest = {
     /**
      * Name is the name of the source.
      */
-    name: string;
+    name?: string;
     /**
      * Owners is a list of owners for the source.
      */
@@ -1144,11 +1144,11 @@ export type request_UpdateSourceRequest = {
     /**
      * Remote is the source URL, including scheme.
      */
-    remote: string;
+    remote?: string;
     /**
      * SourceProvider is the type of the source provider.
      */
-    sourceProvider: string;
+    sourceProvider?: string;
 };
 
 export type request_UpdateStackRequest = {
@@ -1171,7 +1171,7 @@ export type request_UpdateStackRequest = {
     /**
      * Name is the name of the stack.
      */
-    name: string;
+    name?: string;
     /**
      * Owners is a list of owners for the stack.
      */

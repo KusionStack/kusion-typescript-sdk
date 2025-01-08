@@ -13,9 +13,9 @@ export const constant_RunTypeSchema = {
 } as const;
 
 export const constant_SourceProviderTypeSchema = {
-    enum: ['git', 'github', 'oci', 'local', 'git'],
+    enum: ['git', 'git', 'github', 'oci', 'local'],
     type: 'string',
-    'x-enum-varnames': ['SourceProviderTypeGit', 'SourceProviderTypeGithub', 'SourceProviderTypeOCI', 'SourceProviderTypeLocal', 'DefaultSourceType']
+    'x-enum-varnames': ['DefaultSourceType', 'SourceProviderTypeGit', 'SourceProviderTypeGithub', 'SourceProviderTypeOCI', 'SourceProviderTypeLocal']
 } as const;
 
 export const constant_StackStateSchema = {
@@ -1152,7 +1152,7 @@ export const request_CreateBackendRequestSchema = {
             type: 'string'
         }
     },
-    required: ['name'],
+    required: ['backendConfig', 'name'],
     type: 'object'
 } as const;
 
@@ -1211,7 +1211,7 @@ export const request_CreateOrganizationRequestSchema = {
             type: 'array'
         }
     },
-    required: ['owners'],
+    required: ['name', 'owners'],
     type: 'object'
 } as const;
 
@@ -1256,7 +1256,7 @@ export const request_CreateProjectRequestSchema = {
             type: 'integer'
         }
     },
-    required: ['domain'],
+    required: ['name', 'path'],
     type: 'object'
 } as const;
 
@@ -1414,7 +1414,7 @@ export const request_UpdateBackendRequestSchema = {
             type: 'string'
         }
     },
-    required: ['id', 'name'],
+    required: ['id'],
     type: 'object'
 } as const;
 
@@ -1477,7 +1477,7 @@ export const request_UpdateOrganizationRequestSchema = {
             type: 'array'
         }
     },
-    required: ['id', 'owners'],
+    required: ['id'],
     type: 'object'
 } as const;
 
@@ -1526,7 +1526,7 @@ export const request_UpdateProjectRequestSchema = {
             type: 'integer'
         }
     },
-    required: ['domain', 'id'],
+    required: ['id'],
     type: 'object'
 } as const;
 
@@ -1567,7 +1567,7 @@ export const request_UpdateSourceRequestSchema = {
             type: 'string'
         }
     },
-    required: ['id', 'name', 'remote', 'sourceProvider'],
+    required: ['id'],
     type: 'object'
 } as const;
 
@@ -1620,7 +1620,7 @@ export const request_UpdateStackRequestSchema = {
             type: 'string'
         }
     },
-    required: ['id', 'name'],
+    required: ['id'],
     type: 'object'
 } as const;
 

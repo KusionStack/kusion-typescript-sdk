@@ -1196,10 +1196,6 @@ export type request_UpdateStackRequest = {
 
 export type request_UpdateWorkspaceRequest = {
     /**
-     * BackendID is the configuration backend id associated with the workspace.
-     */
-    backendID: number;
-    /**
      * Description is a human-readable description of the workspace.
      */
     description?: string;
@@ -1220,7 +1216,7 @@ export type request_UpdateWorkspaceRequest = {
     /**
      * Owners is a list of owners for the workspace.
      */
-    owners: Array<(string)>;
+    owners?: Array<(string)>;
 };
 
 export type request_WorkspaceConfigs = {

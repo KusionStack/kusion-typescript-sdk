@@ -1626,10 +1626,6 @@ export const request_UpdateStackRequestSchema = {
 
 export const request_UpdateWorkspaceRequestSchema = {
     properties: {
-        backendID: {
-            description: 'BackendID is the configuration backend id associated with the workspace.',
-            type: 'integer'
-        },
         description: {
             description: 'Description is a human-readable description of the workspace.',
             type: 'string'
@@ -1657,7 +1653,7 @@ export const request_UpdateWorkspaceRequestSchema = {
             type: 'array'
         }
     },
-    required: ['backendID', 'id', 'owners'],
+    required: ['id'],
     type: 'object'
 } as const;
 

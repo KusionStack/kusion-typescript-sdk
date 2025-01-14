@@ -1030,6 +1030,12 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
+                        "type": "string",
+                        "description": "Fuzzy match project name to filter project list by.",
+                        "name": "fuzzyName",
+                        "in": "query"
+                    },
+                    {
                         "type": "integer",
                         "description": "The current page to fetch. Default to 1",
                         "name": "page",

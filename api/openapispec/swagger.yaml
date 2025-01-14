@@ -2074,6 +2074,10 @@ paths:
         in: query
         name: name
         type: string
+      - description: Fuzzy match project name to filter project list by.
+        in: query
+        name: fuzzyName
+        type: string
       - description: The current page to fetch. Default to 1
         in: query
         name: page

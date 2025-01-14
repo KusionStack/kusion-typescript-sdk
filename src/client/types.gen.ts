@@ -1602,6 +1602,10 @@ export type UpdateOrganizationError = (unknown);
 export type ListProjectData = {
     query?: {
         /**
+         * Fuzzy match project name to filter project list by.
+         */
+        fuzzyName?: string;
+        /**
          * Project name to filter project list by. This should only return one result if set.
          */
         name?: string;

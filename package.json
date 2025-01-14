@@ -1,6 +1,6 @@
 {
   "name": "@kusionstack/kusion-api-client-sdk",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Kusion API Client SDK",
   "main": "dist/src/client/index.js",
   "types": "dist/src/client/index.d.ts",

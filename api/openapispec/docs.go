@@ -5430,15 +5430,9 @@ const docTemplate = `{
         "request.UpdateWorkspaceRequest": {
             "type": "object",
             "required": [
-                "backendID",
-                "id",
-                "owners"
+                "id"
             ],
             "properties": {
-                "backendID": {
-                    "description": "BackendID is the configuration backend id associated with the workspace.",
-                    "type": "integer"
-                },
                 "description": {
                     "description": "Description is a human-readable description of the workspace.",
                     "type": "string"

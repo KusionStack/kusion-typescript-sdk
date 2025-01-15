@@ -2228,6 +2228,51 @@ export type GenerateStackAsyncResponse = ((handler_Response & {
 
 export type GenerateStackAsyncError = (unknown);
 
+export type PreviewStackData = {
+    /**
+     * The resources to import during the stack preview
+     */
+    body?: request_StackImportRequest;
+    path: {
+        /**
+         * Stack ID
+         */
+        stackID: number;
+    };
+    query: {
+        /**
+         * Show detailed output
+         */
+        detail?: boolean;
+        /**
+         * Force the preview even when the stack is locked
+         */
+        force?: boolean;
+        /**
+         * Import existing resources during the stack preview
+         */
+        importResources?: boolean;
+        /**
+         * Output format. Choices are: json, default. Default to default output format in Kusion.
+         */
+        output?: string;
+        /**
+         * The Spec ID to use for the preview. Default to the last one generated.
+         */
+        specID?: string;
+        /**
+         * The target workspace to preview the spec in.
+         */
+        workspace: string;
+    };
+};
+
+export type PreviewStackResponse = ((handler_Response & {
+    data?: models_Changes;
+}));
+
+export type PreviewStackError = (unknown);
+
 export type PreviewStackAsyncData = {
     /**
      * The resources to import during the stack preview

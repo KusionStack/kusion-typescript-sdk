@@ -13,9 +13,9 @@ export const constant_RunTypeSchema = {
 } as const;
 
 export const constant_SourceProviderTypeSchema = {
-    enum: ['git', 'git', 'github', 'oci', 'local'],
+    enum: ['git', 'github', 'oci', 'local', 'git'],
     type: 'string',
-    'x-enum-varnames': ['DefaultSourceType', 'SourceProviderTypeGit', 'SourceProviderTypeGithub', 'SourceProviderTypeOCI', 'SourceProviderTypeLocal']
+    'x-enum-varnames': ['SourceProviderTypeGit', 'SourceProviderTypeGithub', 'SourceProviderTypeOCI', 'SourceProviderTypeLocal', 'DefaultSourceType']
 } as const;
 
 export const constant_StackStateSchema = {
@@ -388,6 +388,10 @@ export const entity_ResourceInfoSchema = {
         },
         resourceType: {
             description: 'ResourceType is the type of the resource.',
+            type: 'string'
+        },
+        resourceURN: {
+            description: 'ResourceURN is the urn of the resource.',
             type: 'string'
         },
         status: {

@@ -17,10 +17,10 @@ export enum constant_RunType {
 }
 
 export enum constant_SourceProviderType {
-    DefaultSourceType = 'git',
-    SourceProviderTypeGit = 'github',
-    SourceProviderTypeGithub = 'oci',
-    SourceProviderTypeOCI = 'local'
+    SourceProviderTypeGit = 'git',
+    SourceProviderTypeGithub = 'github',
+    SourceProviderTypeOCI = 'oci',
+    SourceProviderTypeLocal = 'local'
 }
 
 export enum constant_StackState {
@@ -315,6 +315,10 @@ export type entity_ResourceInfo = {
      * ResourceType is the type of the resource.
      */
     resourceType?: string;
+    /**
+     * ResourceURN is the urn of the resource.
+     */
+    resourceURN?: string;
     /**
      * Status is the status of the resource.
      */
@@ -1347,6 +1351,10 @@ export type url_Userinfo = unknown;
 export type ListBackendData = {
     query?: {
         /**
+         * Whether to sort the list in ascending order. Default to false
+         */
+        ascending?: boolean;
+        /**
          * The current page to fetch. Default to 1
          */
         page?: number;
@@ -1354,6 +1362,10 @@ export type ListBackendData = {
          * The size of the page. Default to 10
          */
         pageSize?: number;
+        /**
+         * Which field to sort the list by. Default to id
+         */
+        sortBy?: string;
     };
 };
 
@@ -1432,6 +1444,10 @@ export type GetEndpointsError = unknown;
 export type ListModuleData = {
     query?: {
         /**
+         * Whether to sort the list in ascending order. Default to false
+         */
+        ascending?: boolean;
+        /**
          * Module name to filter module list by. Default to all modules.
          */
         moduleName?: string;
@@ -1443,6 +1459,10 @@ export type ListModuleData = {
          * The size of the page. Default to 10
          */
         pageSize?: number;
+        /**
+         * Which field to sort the list by. Default to id
+         */
+        sortBy?: string;
         /**
          * Workspace ID to filter module list by. Default to all workspaces.
          */
@@ -1521,6 +1541,10 @@ export type UpdateModuleError = (unknown);
 export type ListOrganizationData = {
     query?: {
         /**
+         * Whether to sort the list in ascending order. Default to false
+         */
+        ascending?: boolean;
+        /**
          * The current page to fetch. Default to 1
          */
         page?: number;
@@ -1528,6 +1552,10 @@ export type ListOrganizationData = {
          * The size of the page. Default to 10
          */
         pageSize?: number;
+        /**
+         * Which field to sort the list by. Default to id
+         */
+        sortBy?: string;
     };
 };
 
@@ -1602,6 +1630,10 @@ export type UpdateOrganizationError = (unknown);
 export type ListProjectData = {
     query?: {
         /**
+         * Whether to sort the list in ascending order. Default to false
+         */
+        ascending?: boolean;
+        /**
          * Fuzzy match project name to filter project list by.
          */
         fuzzyName?: string;
@@ -1621,6 +1653,10 @@ export type ListProjectData = {
          * The size of the page. Default to 10
          */
         pageSize?: number;
+        /**
+         * Which field to sort the list by. Default to id
+         */
+        sortBy?: string;
     };
 };
 
@@ -1695,6 +1731,10 @@ export type UpdateProjectError = (unknown);
 export type ListResourceData = {
     query?: {
         /**
+         * Whether to sort the list in ascending order. Default to false
+         */
+        ascending?: boolean;
+        /**
          * The organization ID
          */
         orgID?: number;
@@ -1718,6 +1758,10 @@ export type ListResourceData = {
          * The resource type
          */
         resourceType?: string;
+        /**
+         * Which field to sort the list by. Default to id
+         */
+        sortBy?: string;
         /**
          * The stack ID
          */
@@ -1794,6 +1838,10 @@ export type GetRunResultError = (unknown);
 export type ListSourceData = {
     query?: {
         /**
+         * Whether to sort the list in ascending order. Default to false
+         */
+        ascending?: boolean;
+        /**
          * The current page to fetch. Default to 1
          */
         page?: number;
@@ -1801,6 +1849,10 @@ export type ListSourceData = {
          * The size of the page. Default to 10
          */
         pageSize?: number;
+        /**
+         * Which field to sort the list by. Default to id
+         */
+        sortBy?: string;
         /**
          * Source name to filter source list by. Default to all sources.
          */
@@ -1879,6 +1931,10 @@ export type UpdateSourceError = (unknown);
 export type ListRunData = {
     query?: {
         /**
+         * Whether to sort the list in ascending order. Default to false
+         */
+        ascending?: boolean;
+        /**
          * EndTime to filter runs by. Default to all. Format: RFC3339
          */
         endTime?: string;
@@ -1894,6 +1950,10 @@ export type ListRunData = {
          * ProjectID to filter runs by. Default to all
          */
         projectID?: number;
+        /**
+         * Which field to sort the list by. Default to id
+         */
+        sortBy?: string;
         /**
          * StackID to filter runs by. Default to all
          */
@@ -1926,6 +1986,10 @@ export type ListRunError = (unknown);
 export type ListStackData = {
     query?: {
         /**
+         * Whether to sort the list in ascending order. Default to false
+         */
+        ascending?: boolean;
+        /**
          * OrgID to filter stacks by. Default to all
          */
         orgID?: number;
@@ -1949,6 +2013,10 @@ export type ListStackData = {
          * ProjectName to filter stacks by. Default to all
          */
         projectName?: string;
+        /**
+         * Which field to sort the list by. Default to id
+         */
+        sortBy?: string;
     };
 };
 
@@ -2321,6 +2389,10 @@ export type PreviewStackAsyncError = (unknown);
 export type ListWorkspaceData = {
     query?: {
         /**
+         * Whether to sort the list in ascending order. Default to false
+         */
+        ascending?: boolean;
+        /**
          * BackendID to filter workspaces by. Default to all
          */
         backendID?: number;
@@ -2332,6 +2404,10 @@ export type ListWorkspaceData = {
          * The size of the page. Default to 10
          */
         pageSize?: number;
+        /**
+         * Which field to sort the list by. Default to id
+         */
+        sortBy?: string;
     };
 };
 

@@ -1,20 +1,36 @@
 {
   "name": "@kusionstack/kusion-api-client-sdk",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "Kusion API Client SDK",
-  "main": "dist/src/client/index.js",
-  "types": "dist/src/client/index.d.ts",
+  "main": "lib/index.js",
+  "module": "esm/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "require": {
+        "types": "./lib/index.d.ts",
+        "default": "./lib/index.js"
+      },
+      "import": {
+        "types": "./lib/index.d.ts",
+        "default": "./esm/index.js"
+      }
+    }
+  },
   "files": [
-    "dist",
+    "lib",
+    "esm",
+    "package.json",
     "LICENSE",
     "README.md"
   ],
   "scripts": {
     "type-check": "tsc -p tsconfig.json --noEmit",
-    "build": "tsc -p tsconfig.build.json",
-    "tsc": "tsc",
-    "clean": "rm -rf dist",
-    "prepare": "yarn clean && yarn build",
+    "build": "npm run clean && npm run build:cjs && npm run build:esm",
+    "build:esm": "tsc -p tsconfig.json --target ES2020 --module ESNext --outDir esm",
+    "build:cjs": "tsc -p tsconfig.json --target ES5 --module commonjs --outDir lib",
+    "clean": "rm -rf lib esm",
+    "prepare": "npm run build",
     "openapi-ts": "openapi-ts",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
